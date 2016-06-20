@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\Lignearticle" table="lignearticle">
+    <indexes>
+      <index name="IdCommande" columns="IdCommande"/>
+      <index name="IdArticle" columns="IdArticle"/>
+    </indexes>
+    <id name="idligne" type="integer" column="IdLigne">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="quantite" type="integer" column="Quantite" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <many-to-one field="idcommande" target-entity="Commande" fetch="LAZY">
+      <join-columns>
+        <join-column name="IdCommande" referenced-column-name="IdCommande"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="idarticle" target-entity="Article" fetch="LAZY">
+      <join-columns>
+        <join-column name="IdArticle" referenced-column-name="IdArticle"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

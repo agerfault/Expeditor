@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\Article" table="article">
+    <id name="idarticle" type="integer" column="IdArticle">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="nom" type="string" column="Nom" length="120" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="poids" type="integer" column="Poids" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">En Kg</option>
+      </options>
+    </field>
+  </entity>
+</doctrine-mapping>

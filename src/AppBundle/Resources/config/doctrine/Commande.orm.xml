@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\Commande" table="commande">
+    <indexes>
+      <index name="IdClient" columns="IdClient"/>
+    </indexes>
+    <id name="idcommande" type="integer" column="IdCommande">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="date" type="datetime" column="Date" nullable="false"/>
+    <field name="statut" type="string" column="Statut" length="10" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <many-to-one field="idclient" target-entity="Client" fetch="LAZY">
+      <join-columns>
+        <join-column name="IdClient" referenced-column-name="IdClient"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

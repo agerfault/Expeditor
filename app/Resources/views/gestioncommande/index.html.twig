@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Gestioncommande list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Idgestioncommande</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for gestioncommande in gestioncommandes %}
+            <tr>
+                <td><a href="{{ path('gestioncommande_show', { 'id': gestioncommande.idgestioncommande }) }}">{{ gestioncommande.date }}</a></td>
+                <td>{{ gestioncommande.idgestioncommande }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('gestioncommande_show', { 'id': gestioncommande.idgestioncommande }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('gestioncommande_edit', { 'id': gestioncommande.idgestioncommande }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('gestioncommande_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

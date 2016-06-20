@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Gestioncommande</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Date</th>
+                <td>{% if gestioncommande.date %}{{ gestioncommande.date|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Idgestioncommande</th>
+                <td>{{ gestioncommande.idgestioncommande }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('gestioncommande_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('gestioncommande_edit', { 'id': gestioncommande.idgestioncommande }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
