@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Gestioncommande;
 use AppBundle\Form\GestioncommandeType;
+use AppBundle\Repository\GestioncommandeRepository;
 
 /**
  * Gestioncommande controller.
@@ -24,10 +25,20 @@ class GestioncommandeController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        /*$em = $this->getDoctrine()->getManager();
+		
+		//Récupération de la première commande non traité
+		$gestioncommandes = $em->getRepository('AppBundle:Gestioncommande')->getGestionCommande('EC');
 
-        $gestioncommandes = $em->getRepository('AppBundle:Gestioncommande')->findAll();
-
+		dump($gestioncommandes);*/
+		
+		  $em = $this
+                                ->getDoctrine()
+                                ->getManager();
+        
+        $gestionCommandeRepository = new GestioncommandeRepository($em);
+        $gestioncommandes =  $gestionCommandeRepository->findCommandeEnAttente();
+		
         return $this->render('gestioncommande/index.html.twig', array(
             'gestioncommandes' => $gestioncommandes,
         ));
