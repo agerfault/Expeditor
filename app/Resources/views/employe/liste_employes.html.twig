@@ -1,0 +1,74 @@
+{% extends 'default_manager.html.twig' %}
+
+{% block title %}{{parent()}}- Commandes{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() { 
+        $(".select2").select2({ width: '100%' });
+        });
+    </script>
+{% endblock %}
+
+{% block body %} 
+    <div class="col-md-10 col-sm-11 display-table-cell v-align">
+        <div class="user-dashboard">
+
+            <div class="row">
+                <div class='col-sm-11'>
+                    <div class='well well-sm' style="box-shadow: 2px 2px 5px #656565; margin-top: 3px;">
+                        <h4>Gestion des employés</h4>
+                    </div>
+                </div>
+                <div class='col-sm-1'>
+                </div>
+            </div>
+
+            <div class='row' style='margin-bottom: 10px;'>
+                <div class='col-sm-1'>
+                </div>
+                
+                <div class='col-sm-2'>
+                    <a class='btn btn-success'><i class="fa fa-plus" aria-hidden="true"></i> Nouveau</a>
+                </div>
+                <div class='col-sm-4'>
+                    
+                <form class="form-inline">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <select class='select2'>
+                                {% for employe in employes %}
+                                    <option>{{employe.nom}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary"> Afficher</button>
+                </form>
+
+                </div>	
+                <div class='col-sm-5'>
+                </div>
+            </div>
+
+            <table class="table table-striped table-hover ">
+            <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">NOM</th>
+                    <th class="text-center">STATUT</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            {% for employe in employes %}
+                <tr>
+                    <td class="text-center">{{employe.idemploye}}</td>
+                    <td class="text-center">{{employe.nom}}</td>
+                    <td class="text-center"><span class="label label-{% if employe.statut == 1 %}default{% else %}danger{% endif %}">{% if employe.statut == 1 %}Employé{% else %}Manager{% endif %}</span></td>
+                    <td class="text-center"><a class='btn btn-warning' href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="#" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

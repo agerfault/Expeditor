@@ -28,9 +28,7 @@ class ArticleController extends Controller
 
         $articles = $em->getRepository('AppBundle:Article')->findAll();
 
-        return $this->render('article/index.html.twig', array(
-            'articles' => $articles,
-        ));
+        return $this->render('article/liste_articles.html.twig', ['articles' => $articles, 'active' => 'A']);
     }
 
     /**

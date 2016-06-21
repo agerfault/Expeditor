@@ -28,9 +28,7 @@ class EmployeController extends Controller
 
         $employes = $em->getRepository('AppBundle:Employe')->findAll();
 
-        return $this->render('employe/index.html.twig', array(
-            'employes' => $employes,
-        ));
+        return $this->render('employe/liste_employes.html.twig', ['employes' => $employes, 'active' => 'E']);
     }
 
     /**
