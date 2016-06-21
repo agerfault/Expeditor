@@ -26,11 +26,10 @@ class CommandeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $commandes = $em->getRepository('AppBundle:Commande')->findAll();
+        $commandes = $em->getRepository('AppBundle:Gestioncommande')->findAll();
+        $employes = $em->getRepository('AppBundle:Employe')->findAll();
 
-        return $this->render('commande/index.html.twig', array(
-            'commandes' => $commandes,
-        ));
+        return $this->render('commande/liste_commandes.html.twig', ['commandes' => $commandes, 'employes' => $employes, 'active' => 'C']);
     }
 
     /**

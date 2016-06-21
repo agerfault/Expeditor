@@ -2,12 +2,27 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}Expeditor{% endblock %}</title>
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        {% block javascripts %}{% endblock %}
+        
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="{{asset('bundles/framework/css/bootstrap.min.css')}}" media="screen">
+        <link rel="stylesheet" href="{{asset('bundles/framework/css/bootstrap-theme.min.css')}}" media="screen">
+        <link rel="stylesheet" href="{{asset('bundles/framework/css/font-awesome.min.css')}}" media="screen">
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% block stylesheets %}{% endblock %}
+        
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <div class="container-fluid display-table">
+            <div class="row display-table-row">
+            {% block menu %}{% endblock %}
+            {% block body %}{% endblock %}
+            </div>
+        </div>
     </body>
 </html>
