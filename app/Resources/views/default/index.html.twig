@@ -10,12 +10,12 @@
 
 {% block body %}
     <div class="container">
-      <form class="form-signin">
+      <form class="form-signin" action="{{ path('seConnecter') }}" method="POST">
             <h2 class="form-signin-heading">Expeditor</h2>
-            <label for="inputEmail" class="sr-only">Identifiant</label>
-            <input type="email" id="inputEmail" class="form-control" placeholder="Identifiant" required autofocus>
-            <label for="inputPassword" class="sr-only">Mot de passe</label>
-            <input type="password" id="inputPassword" class="form-control" placeholder="Mot de passe" required>
+            <label for="inputIdentifiant" class="sr-only">Identifiant</label>
+            <input type="texte" name="identifiant" id="inputIdentifiant" class="form-control" placeholder="Identifiant" required autofocus>
+            <label for="inputMotDePasse" class="sr-only">Mot de passe</label>
+            <input type="Password" name="motDePasse" id="inputMotDePasse" class="form-control" placeholder="Mot de passe" required>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Se connecter</button>
       </form>
 

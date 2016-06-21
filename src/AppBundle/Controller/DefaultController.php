@@ -21,8 +21,7 @@ class DefaultController extends Controller
                 'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..'),
             ]);
         }
-        
-        switch($employe->getStatus()){
+        switch($employe->getStatut()){
             case 1 :
                 return $this->redirectToRoute('gestioncommande_index');
             case 2 :

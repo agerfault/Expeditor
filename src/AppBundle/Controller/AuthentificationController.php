@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use AppBundle\Repository\EmployeRepository;
 
 /**
  * Description of AuthentificationController
@@ -20,13 +21,20 @@ class AuthentificationController extends Controller {
      * @Route("/se-connecter", name="seConnecter")
      * @Method("POST")
      */
-    public function indexAction(Request $request)
+    public function seConnecterAction(Request $request)
     {
         $identifiant = $request->request->get('identifiant');
         $motDePasse = $request->request->get('motDePasse');
         
         $em = $this->getDoctrine()->getManager();
-
-        return $this->render('commande/liste_commandes.html.twig', ['commandes' => $commandes, 'employes' => $employes, 'active' => 'C']);
+        
+        try{
+            $employeRepository = new EmployeRepository($em);
+            $employeRepository->connecterEmploye($identifiant, $motDePasse);
+        } catch (\Exception $ex) {
+            $this->addFlash('erreur', $ex->getMessage());
+        }
+        
+        return $this->redirectToRoute('homepage');
     }
 }

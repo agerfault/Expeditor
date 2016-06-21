@@ -7,18 +7,33 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        {% block javascripts %}{% endblock %}
-        
+        {% block javascripts %}
+        {% endblock %}
         <link href="http://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="{{asset('bundles/framework/css/bootstrap.min.css')}}" media="screen">
         <link rel="stylesheet" href="{{asset('bundles/framework/css/bootstrap-theme.min.css')}}" media="screen">
         <link rel="stylesheet" href="{{asset('bundles/framework/css/font-awesome.min.css')}}" media="screen">
         <link rel="stylesheet" href="{{asset('bundles/framework/css/style-general.css')}}" media="screen">
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        {% block stylesheets %}{% endblock %}
-        
+        {% block stylesheets %}
+            <style>
+                .flash-messages .alert{position:absolute;}
+            </style>
+        {% endblock %}
     </head>
     <body>
+        <div class="flash-messages">
+            {% block flashes %}
+                {% for notice_level, flashes in app.session.flashbag.all %}
+                    {% for flash in flashes %}
+                        <div class="alert alert-dismissible {% if notice_level == 'erreur' %}  alert-danger {% endif %}">
+                          <button type="button" class="close" data-dismiss="alert">&times;</button>
+                          <strong>{{ notice_level }}</strong> {{ flash }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endblock flashes %}
+        </div>
         <div class="container-fluid display-table">
             <div class="row display-table-row">
             {% block menu %}{% endblock %}         
