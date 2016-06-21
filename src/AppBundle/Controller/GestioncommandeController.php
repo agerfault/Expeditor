@@ -32,16 +32,45 @@ class GestioncommandeController extends Controller
 
 		dump($gestioncommandes);*/
 		
-		  $em = $this
-                                ->getDoctrine()
-                                ->getManager();
+		  $em = $this ->getDoctrine()
+                              ->getManager();
         
         $gestionCommandeRepository = new GestioncommandeRepository($em);
         $gestioncommandes =  $gestionCommandeRepository->findCommandeEnAttente();
-		
+	
         return $this->render('gestioncommande/index.html.twig', array(
             'gestioncommandes' => $gestioncommandes,
         ));
+    }
+    
+     /**
+     * Valider la saisie de la commande de l'employé
+     *
+     * @Route("/validerCommande", name="validerCommande")
+     * @Method("POST")
+     */
+    public function validerCommandeAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        //Récupération de la première commande non traité
+	$ligneArticle = $em->getRepository('AppBundle:Lignearticle')->findBy(['idcommande' => 1]); //1 la valeur passer par alex
+        
+        $tabElementsSaisis = $request->request->all();
+        
+        foreach($ligneArticle as $maLigne)
+        {
+            foreach($tabElementsSaisis as $article)
+            {
+                if($maLigne->quantite == $article)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }    
     }
 
     /**
