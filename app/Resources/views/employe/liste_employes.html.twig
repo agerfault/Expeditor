@@ -29,7 +29,7 @@
                 </div>
                 
                 <div class='col-sm-2'>
-                    <a class='btn btn-success'><i class="fa fa-plus" aria-hidden="true"></i> Nouveau</a>
+                    <a class='btn btn-success' href='{{path('employe_new')}}' ><i class="fa fa-plus" aria-hidden="true"></i> Nouveau</a>
                 </div>
                 <div class='col-sm-4'>
                     
@@ -65,7 +65,7 @@
                     <td class="text-center">{{employe.idemploye}}</td>
                     <td class="text-center">{{employe.nom}}</td>
                     <td class="text-center"><span class="label label-{% if employe.statut == 1 %}default{% else %}danger{% endif %}">{% if employe.statut == 1 %}Employé{% else %}Manager{% endif %}</span></td>
-                    <td class="text-center"><a class='btn btn-warning' href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="#" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                    <td class="text-center"><a class='btn btn-warning' href="{{path('employe_edit', {'id' : employe.idemploye})}}"><i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="{{path('employe_edit', {'id' : employe.idemploye})}}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                 </tr>
             {% endfor %}
             </table>

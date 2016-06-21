@@ -45,16 +45,16 @@ class ArticleController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $article->setNom($form->get('nom')->getData());
+            $article->setPoids($form->get('poids')->getData());
             $em->persist($article);
             $em->flush();
 
-            return $this->redirectToRoute('article_show', array('id' => $article->getId()));
+            $articles = $em->getRepository('AppBundle:Article')->findAll();
+            return $this->redirectToRoute('article_index');
         }
 
-        return $this->render('article/new.html.twig', array(
-            'article' => $article,
-            'form' => $form->createView(),
-        ));
+        return $this->render('article/new.html.twig', ['article' => $article,'form' => $form->createView()]);
     }
 
     /**
@@ -62,7 +62,7 @@ class ArticleController extends Controller
      *
      * @Route("/{id}", name="article_show")
      * @Method("GET")
-     */
+     
     public function showAction(Article $article)
     {
         $deleteForm = $this->createDeleteForm($article);
@@ -72,7 +72,7 @@ class ArticleController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
-
+*/
     /**
      * Displays a form to edit an existing Article entity.
      *
@@ -81,7 +81,6 @@ class ArticleController extends Controller
      */
     public function editAction(Request $request, Article $article)
     {
-        $deleteForm = $this->createDeleteForm($article);
         $editForm = $this->createForm('AppBundle\Form\ArticleType', $article);
         $editForm->handleRequest($request);
 
@@ -90,13 +89,12 @@ class ArticleController extends Controller
             $em->persist($article);
             $em->flush();
 
-            return $this->redirectToRoute('article_edit', array('id' => $article->getId()));
+            return $this->redirectToRoute('article_index');
         }
 
         return $this->render('article/edit.html.twig', array(
             'article' => $article,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -104,20 +102,18 @@ class ArticleController extends Controller
      * Deletes a Article entity.
      *
      * @Route("/{id}", name="article_delete")
-     * @Method("DELETE")
+     * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request, Article $article)
     {
-        $form = $this->createDeleteForm($article);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $em->getRepository('AppBundle:Article')->findAll();
+        $em->remove($article);
+        $em->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($article);
-            $em->flush();
-        }
-
+        $articles = $em->getRepository('AppBundle:Article')->findAll();
         return $this->redirectToRoute('article_index');
+        
     }
 
     /**
