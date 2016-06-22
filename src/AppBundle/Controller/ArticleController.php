@@ -24,15 +24,16 @@ class ArticleController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $recherche = $request->request->all();
-       
-        //var_dump($recherche);
-        
+        $recherche = $request->request->get('recherche');
         $em = $this->getDoctrine()->getManager();
-
-        $articles = $em->getRepository('AppBundle:Article')->findAll();
-
-        return $this->render('article/liste_articles.html.twig', ['articles' => $articles, 'active' => 'A']);
+        $articles_select = $em->getRepository('AppBundle:Article')->findAll();
+       
+        if($recherche != null) {
+            $articles = $em->getRepository('AppBundle:Article')->findBy(['idarticle' => $recherche]);
+        } else {
+            $articles = $articles_select;
+        }
+        return $this->render('article/liste_articles.html.twig', ['articles' => $articles, 'articles_select' => $articles_select, 'active' => 'A']);
     }
 
     /**
