@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+<script>
+
+$(document).ready(function() {
+  $(".print").click(function () {
+   $(".test").show()
+  });
+ });
+ 
+</script>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="row">
+        <div class='col-sm-1'>
+        </div>
+        <div class='col-sm-10'>
+            <div class='well well-sm' style="box-shadow: 2px 2px 5px #656565; margin-top: 3px;">
+                <h3>La commande N° {{ idCde }} à été valider</h3>
+            </div>
+        </div>
+        <div class='col-sm-1'>
+        </div>
+    </div>
+    
+    <div class='row'>
+        <div class='col-md-10 col-md-offset-1'>
+			<a target="_blank" class="btn btn-default print" href="{{ path('pdf_bonlivraison', {'commande_id': idCde } ) }}"><i class="fa fa-print" aria-hidden="true"></i> Imprimer</a>
+
+			<a class="btn btn-primary test" href="{{ path('gestioncommande_index') }}" style="display:none;"><i class="fa fa-arrow-right" aria-hidden="true"></i> Passer à la commande suivante</a>
+        </div>
+    </div>
+{% endblock %}

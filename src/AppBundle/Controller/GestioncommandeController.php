@@ -25,13 +25,6 @@ class GestioncommandeController extends Controller
      */
     public function indexAction()
     {
-        /*$em = $this->getDoctrine()->getManager();
-		
-		//Récupération de la première commande non traité
-		$gestioncommandes = $em->getRepository('AppBundle:Gestioncommande')->getGestionCommande('EC');
-
-		dump($gestioncommandes);*/
-		
 		  $em = $this ->getDoctrine()
                               ->getManager();
         
@@ -78,7 +71,10 @@ class GestioncommandeController extends Controller
                 {
 					$gestionCommandeRepository = new GestioncommandeRepository($em);
 					$gestionCommandeRepository->changerStatutCommande('T',$idCde);
-                    return $this->redirectToRoute('gestioncommande_index');
+					//return $this->redirectToRoute('pdf_bonlivraison', ['commande_id' => $idCde]);
+					
+                    return $this->render('gestioncommande/impression_bl.html.twig',['idCde' => $idCde]);
+					//redirectToRoute('gestioncommande_index');
                 }
                 else
                 {
@@ -91,6 +87,7 @@ class GestioncommandeController extends Controller
 				$i++;
         }    
     }
+
 
     /**
      * Creates a new Gestioncommande entity.
