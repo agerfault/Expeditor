@@ -28,9 +28,11 @@
         </div>
 
         <div class='row' style='margin-bottom: 10px;'>
-            <div class='col-sm-1'>
-            </div>
-            <div class='col-sm-2'>
+            <div class='col-sm-3'>
+                <a href='{{path('commande_index_filtred', {'statut' : 'ALL'})}}' data-toggle="tooltip" data-placement="top" title="" data-original-title="Toutes" class="btn btn-default {%if statut is null %}disabled{% endif %}"><i class="fa fa-tasks" aria-hidden="true"></i></a>
+                <a href='{{path('commande_index_filtred', {'statut' : 'EA'})}}' data-toggle="tooltip" data-placement="top" title="" data-original-title="En attente" class="btn btn-danger {%if statut == 'EA' %}disabled{% endif %}"><b>A</b></a>
+                <a href='{{path('commande_index_filtred', {'statut' : 'EC'})}}' data-toggle="tooltip" data-placement="top" title="" data-original-title="En cours" class="btn btn-warning {%if statut == 'EC' %}disabled{% endif %}"><b>C</b></a>
+                <a href='{{path('commande_index_filtred', {'statut' : 'T'})}}' data-toggle="tooltip" data-placement="top" title="" data-original-title="Terminée" class="btn btn-success {%if statut == 'T' %}disabled{% endif %}"><b>T</b></a>
             </div>
             <div class='col-sm-4'>
                 <form class="form-inline" method='POST' action='{{path('commande_index')}}' >

@@ -46,4 +46,33 @@ class CommandeRepository extends EntityRepository {
         return $query->getArrayResult();
     }
 
+    public function findCommandesByStatut($statut) {
+        
+        $query = $this->getEntityManager()
+                        ->createQuery(
+                            'SELECT e.nom as nomemp, c.idcommande, c.date, c.statut, cli.nom as nomcli '
+                                . 'FROM AppBundle:Commande c '
+                                . 'LEFT JOIN AppBundle:Gestioncommande gc WITH gc.idcommande = c.idcommande '
+                                . 'LEFT JOIN AppBundle:Employe e WITH e.idemploye = gc.idemploye '
+                                . 'LEFT JOIN AppBundle:Client cli WITH c.idclient = cli.idclient '
+                                . 'WHERE c.statut = :statut ');
+        $query->setParameter('statut', $statut);
+        return $query->getArrayResult();
+    }
+
+    public function findCommandesByStatutAndIdEmploye($statut, $idemploye) {
+        
+        $query = $this->getEntityManager()
+                        ->createQuery(
+                            'SELECT e.nom as nomemp, c.idcommande, c.date, c.statut, cli.nom as nomcli '
+                                . 'FROM AppBundle:Commande c '
+                                . 'LEFT JOIN AppBundle:Gestioncommande gc WITH gc.idcommande = c.idcommande '
+                                . 'LEFT JOIN AppBundle:Employe e WITH e.idemploye = gc.idemploye '
+                                . 'LEFT JOIN AppBundle:Client cli WITH c.idclient = cli.idclient '
+                                . 'WHERE c.statut = :statut AND e.idemploye = :idemploye ');
+        $query->setParameter('statut', $statut);
+        $query->setParameter('idemploye', $idemploye);
+        return $query->getArrayResult();
+    }
+
 }

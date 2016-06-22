@@ -46,7 +46,43 @@ class CommandeController extends Controller
                 ['commandes' => $commandes,
                 'filtre' => $isFiltred,
                 'employes' => $employes,
+                'statut' => null,
                 'active' => 'C']);
+    }
+    /**
+     * Lists all Commande entities.
+     *
+     * @Route("/{statut}", name="commande_index_filtred")
+     * @Method({"POST", "GET"})
+     */
+    public function indexfiltredAction(Request $request, $statut)
+    {
+        if ($statut != 'ALL') {
+            $recherche = $request->request->get('recherche');
+            $em = $this ->getDoctrine()->getManager();
+            $commandeRepository = new CommandeRepository($em);
+
+            $commandes = $commandeRepository->findCommandesByStatut($statut);
+
+            $repoEmploye = $em->getRepository('AppBundle:Employe');
+            $employes = $repoEmploye->findAll();
+            $isFiltred = false;       
+
+            if($recherche != null) {
+                $commandes = $commandeRepository->findCommandesByStatutAndIdEmploye($statut, $recherche);
+                //$commandes = $em->getRepository('AppBundle:Commande')->findBy(['idemploye' => $recherche]);
+                $isFiltred = true;
+            }
+
+            return $this->render('commande/liste_commandes.html.twig',
+                    ['commandes' => $commandes,
+                    'filtre' => $isFiltred,
+                    'employes' => $employes,
+                    'statut' => $statut,
+                    'active' => 'C']);
+        } else {
+            return $this->redirectToRoute('commande_index');
+        }
     }
 
     /**
