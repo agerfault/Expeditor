@@ -111,7 +111,6 @@ class ArticleController extends Controller
         $em->remove($article);
         $em->flush();
 
-        $articles = $em->getRepository('AppBundle:Article')->findAll();
         return $this->redirectToRoute('article_index');
         
     }

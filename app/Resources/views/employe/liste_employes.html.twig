@@ -68,7 +68,7 @@
                     <td class="text-center"><span class="label label-{% if employe.statut == 1 %}default{% else %}danger{% endif %}">{% if employe.statut == 1 %}Employé{% else %}Manager{% endif %}</span></td>
 
                     <td class="text-center">{{ nbcommandetraite[employe.idemploye].1 }}</td>
-                    <td class="text-center"><a class='btn btn-warning' href="{{path('employe_edit', {'id' : employe.idemploye})}}"><i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="{{path('employe_edit', {'id' : employe.idemploye})}}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                    <td class="text-center"><a class='btn btn-warning' href="{{path('employe_edit', {'id' : employe.idemploye})}}"><i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="{{path('employe_delete', {'id' : employe.idemploye})}}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
 
                 </tr>
             {% endfor %}

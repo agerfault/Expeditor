@@ -60,6 +60,7 @@ class EmployeController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $employe->setMotdepasse(md5($employe->getMotdepasse()));
             $em->persist($employe);
             $em->flush();
 
@@ -96,18 +97,21 @@ class EmployeController extends Controller
      */
     public function editAction(Request $request, Employe $employe)
     {
-        $deleteForm = $this->createDeleteForm($employe);
         $editForm = $this->createForm('AppBundle\Form\EmployeType', $employe);
         $editForm->handleRequest($request);
+        if (!$editForm->isSubmitted()) {
+            $employe->setMotdepasse('');
+            $editForm = $this->createForm('AppBundle\Form\EmployeType', $employe);
+        }
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $employe->setMotdepasse(md5($employe->getMotdepasse()));
             $em->persist($employe);
             $em->flush();
 
             return $this->redirectToRoute('employe_index');
         }
-
         return $this->render('employe/edit.html.twig', ['employe' => $employe, 'edit_form' => $editForm->createView()]);
     }
 
@@ -115,12 +119,12 @@ class EmployeController extends Controller
      * Deletes a Employe entity.
      *
      * @Route("/{id}", name="employe_delete")
-     * @Method("DELETE")
+     * @Method({"GET", "POST", "DELETE"})
      */
     public function deleteAction(Request $request, Employe $employe)
     {
-        $form = $this->createDeleteForm($employe);
         $em = $this->getDoctrine()->getManager();
+        $em->getRepository('AppBundle:Employe')->findAll();
         $em->remove($employe);
         $em->flush();
 
