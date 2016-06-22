@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Gestioncommande;
 use AppBundle\Form\GestioncommandeType;
 use AppBundle\Repository\GestioncommandeRepository;
+use AppBundle\Repository\EmployeRepository;
+use AppBundle\Enumeration\StatutEmployeEnum;
 
 /**
  * Gestioncommande controller.
@@ -28,6 +30,9 @@ class GestioncommandeController extends Controller
 		  $em = $this ->getDoctrine()
                               ->getManager();
         
+        $employeRepo = new EmployeRepository($em);
+        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::EMPLOYE);
+                  
         $gestionCommandeRepository = new GestioncommandeRepository($em);
         $gestioncommandes =  $gestionCommandeRepository->findCommandeEnAttente();
 		

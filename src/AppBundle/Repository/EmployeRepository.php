@@ -9,6 +9,8 @@
 namespace AppBundle\Repository;
 
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Description of EmployeRepository
@@ -46,5 +48,16 @@ class EmployeRepository {
             throw new \Exception("Aucun employe connecté");
         }
         $session->remove('employe');
+    }
+    
+    public function verifierConnexionEmploye($statut){
+        $session = new Session();
+        $employe = $session->get('employe');
+        if($employe == null){
+            throw new AccessDeniedException('Vous n\'avez pas la permission d\'accéder à cette page.');
+        }
+        if($employe->getStatut() != $statut){
+            throw new AccessDeniedException('Vous n\'avez pas la permission d\'accéder à cette page.');
+        }
     }
 }

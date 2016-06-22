@@ -37,4 +37,24 @@ class AuthentificationController extends Controller {
         
         return $this->redirectToRoute('homepage');
     }
+    
+    /**
+     * Permet à un employé ou un manager de se déconnecter.
+     * 
+     * @Route("/se-deconnecter", name="seDeconnecter")
+     * @Method("GET")
+     */
+    public function seDeconnecterAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        try{
+            $employeRepository = new EmployeRepository($em);
+            $employeRepository->deconnecterEmploye();
+        } catch (\Exception $ex) {
+            $this->addFlash('erreur', $ex->getMessage());
+        }
+        
+        return $this->redirectToRoute('homepage');
+    }
 }
