@@ -15,6 +15,7 @@
     
     <div class='row'>
         <div class='col-md-10 col-md-offset-1'>
+            <form action="{{ path('validerCommande', {'id' : gestioncommandes[0].idcommande}) }}" method="POST">
             <h2><small>Entreprise :</small> {{gestioncommandes[0].nomClient}}</h2>
             <h3><small>Adresse :</small> {{gestioncommandes[0].adresse}}</h3>
             <hr>
@@ -35,7 +36,7 @@
                             <td>{{article.quantite}}</td>
                             <td class="col-xs-3 nb-articles-ajoutes">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name='{{article.idarticle}}' placeholder="Saisir nombre" />
+                                    <input type="text" class="form-control" name='articles[]' placeholder="Saisir nombre" />
                                 </div>
                             </td>
                         </tr>
@@ -45,9 +46,10 @@
             </div>
             <hr>
             <div class="col-md-6 col-md-offset-3">
-                    <a href="#" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Annuler</a>
-                    <a href="{{ path('validerCommande', {'id' : gestioncommandes[0].idcommande}) }}" class="btn btn-success pull-right"><span class="glyphicon glyphicon-ok"></span> Valider</a>
+                    <button type="reset" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Annuler</button>
+                    <button type="submit" class="btn btn-success pull-right"><span class="glyphicon glyphicon-ok"></span> Valider</button>
             </div>
+            </form>
         </div>
     </div>
 {% endblock %}

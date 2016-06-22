@@ -81,7 +81,7 @@ class GestioncommandeRepository
             $query = $this->_em->createQuery($id);
             $query->setParameter('statut', 'EA');
             $id = $query->setMaxResults(1)->getResult();
-        
+		
 		$sql = 'SELECT  cmd.idcommande, cmd.date,
                                 cli.nom as nomClient, cli.adresse,
                                 art.idarticle, art.nom, art.poids,
@@ -100,6 +100,21 @@ class GestioncommandeRepository
         $query->setParameter('statut', 'EA');
         $query->setParameter('id', $id);
         return $query->getResult();
+		
     }
+	
+	 public function changerStatutCommande($statut, $idcde) {
+
+		 $id = 'UPDATE AppBundle:Commande cmd '
+                    . 'SET cmd.statut = :statut '
+                    . 'WHERE cmd.idcommande = :idcde';
+            
+            $query = $this->_em->createQuery($id);
+            $query->setParameter('statut', $statut);
+			$query->setParameter('idcde', $idcde);
+			$query->execute();
+			
+	 }
+	
     
 }
