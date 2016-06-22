@@ -84,7 +84,7 @@ class GestioncommandeRepository
         
 		$sql = 'SELECT  cmd.idcommande, cmd.date,
                                 cli.nom as nomClient, cli.adresse,
-                                art.nom, art.poids,
+                                art.idarticle, art.nom, art.poids,
                                 la.quantite
                        FROM AppBundle:Commande cmd,
                             AppBundle:Client cli,
