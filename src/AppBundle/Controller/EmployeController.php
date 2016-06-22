@@ -30,6 +30,7 @@ class EmployeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $employes_select = $em->getRepository('AppBundle:Employe')->findBy([], ['statut' => 'DESC']);
         $isFiltred = false;
+        
         if($recherche != null) {
             $employes = $em->getRepository('AppBundle:Employe')->findBy(['idemploye' => $recherche]);
             $isFiltred = true;

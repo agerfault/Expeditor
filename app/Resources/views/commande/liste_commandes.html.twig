@@ -7,6 +7,9 @@
         $(document).ready(function() { 
         $(".select2").select2({ width: '100%' });
         });
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        });
     </script>
 {% endblock %}
 
@@ -30,17 +33,20 @@
             <div class='col-sm-2'>
             </div>
             <div class='col-sm-4'>
-                <form class="form-inline">
+                <form class="form-inline" method='POST' action='{{path('commande_index')}}' >
                     <div class="form-group">
                         <div class="input-group select-style">
-                            <select class='select2' name='selected'>
+                            <select class='select2' name='recherche'>
                                 {% for employe in employes %}
-                                    <option>{{employe.nom}}</option>
+                                    <option value='{{employe.idemploye}}'>{{employe.nom}}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Rechercher"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    {% if filtre %}
+                        <a href='{{path('commande_index')}}' data-toggle="tooltip" data-placement="top" title="" data-original-title="Annuler la recherche" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></a>
+                    {% endif %}
                 </form>
             </div>	
             <div class='col-sm-5'>
@@ -66,7 +72,7 @@
                 <td class="text-center"><span class="label label-{% if commande.statut == "EA" %}danger{% elseif commande.statut == "EC" %}warning{% else %}success{% endif %}">{% if commande.statut == "EA" %}En attente{% elseif commande.statut == "EC" %}En cours{% else %}Terminée{% endif %}</span></td>
                 <td class="text-center">{% if commande.nomemp is null %}-{% else %}{{ commande.nomemp }}{% endif %}</td>
                 <td class="text-center">{{commande.date | date('d/m/Y')}}</td>
-                <td class="text-center"><a class='btn btn-warning {% if commande.statut != "EC" %}disabled{% endif %}' href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+                <td class="text-center"><a class='btn btn-warning {% if commande.statut != "EC" %}disabled{% endif %}' href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Modifier affectation" ><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
             </tr>
         {% endfor %}
         </table>
