@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{parent()}}- Gestion commandes{% endblock %}
+
 {% block body %}
     <div class="row">
         <div class='col-sm-1'>
         </div>
         <div class='col-sm-10'>
-            <div class='well well-sm' style="box-shadow: 2px 2px 5px #656565; margin-top: 3px;">
+            <div class='well well-sm well-title'>
                 <h3>Traitement de la commande N° {{gestioncommandes[0].idcommande}}</h3>
             </div>
         </div>

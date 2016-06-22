@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{parent()}}- Employés{% endblock %}
+
 {% block body %}
     <div class="row">
         <div class='col-sm-1'>
         </div>
         <div class='col-sm-10'>
-            <div class='well well-sm' style="box-shadow: 2px 2px 5px #656565; margin-top: 3px;">
+            <div class='well well-sm well-title'>
                 <h4>Créer un employé</h4>
             </div>
         </div>
@@ -45,7 +47,7 @@
                      </div>
                         
                     <center>
-                         <a href="{{ path('employe_index') }}" class='btn btn-primary' style='margin-right: 25px;'>< Retour</a><input class='btn btn-success' type="submit" value="Créer" />
+                         <a href="{{ path('employe_index') }}" class='btn btn-primary' style='margin-right: 25px;'><i class="fa fa-arrow-left" aria-hidden="true"></i> Retour</a><input class='btn btn-success' type="submit" value="Créer" />
                     </center> 
                     
                     {{ form_end(form) }}

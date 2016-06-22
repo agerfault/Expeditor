@@ -1,0 +1,9 @@
+.well-title {
+    padding-left: 50px;
+    box-shadow: 2px 2px 5px #656565;
+    margin-top: 3px;
+}
+
+.select-style {
+    width: 150px;
+}

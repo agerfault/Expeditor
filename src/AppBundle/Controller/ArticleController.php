@@ -20,10 +20,14 @@ class ArticleController extends Controller
      * Lists all Article entities.
      *
      * @Route("/", name="article_index")
-     * @Method("GET")
+     * @Method({"POST", "GET"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
+        $recherche = $request->request->all();
+       
+        var_dump($recherche);
+        
         $em = $this->getDoctrine()->getManager();
 
         $articles = $em->getRepository('AppBundle:Article')->findAll();
