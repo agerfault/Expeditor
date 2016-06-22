@@ -91,7 +91,7 @@ class CommandeController extends Controller
             $em->persist($commande);
             $em->flush();
 
-            return $this->redirectToRoute('commande_edit', array('id' => $commande->getId()));
+            return $this->redirectToRoute('commande_index');
         }
 
         return $this->render('commande/edit.html.twig', array(

@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
+    <style type="text/css">
+        body { background-image: url("{{asset('images/wallpaper.jpeg')}}"); background-attachment: fixed; }
+        h2 { color : whitesmoke; }
+    </style>
     <link href="{{asset('bundles/framework/css/signin.css')}}" rel="stylesheet"/>
 {% endblock %}
 

@@ -5,6 +5,8 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class EmployeType extends AbstractType
 {
@@ -15,9 +17,9 @@ class EmployeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom')
-            ->add('motdepasse')
-            ->add('statut')
+            ->add('nom',TextType::class, ['label' => 'Nom de l\'employé : *','required' => true,'attr' => ['class'=> 'form-control'] ])
+            ->add('motdepasse',TextType::class, ['label' => 'Mot de passe : *','required' => true,'attr' => ['class'=> 'form-control'] ])
+            ->add('statut',IntegerType::class, ['label' => 'Statut de l\'employé : *','required' => true,'attr' => ['class'=> 'form-control', 'min' => 1] ])
         ;
     }
     
