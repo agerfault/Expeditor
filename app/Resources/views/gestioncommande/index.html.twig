@@ -1,39 +1,54 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Gestioncommande list</h1>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Idcommande</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for gestioncommande in gestioncommandes %}
-            <tr>
-                <td><a href="{{ path('gestioncommande_show', { 'id': gestioncommande.idcommande }) }}">{{ gestioncommande.date|date('d/m/Y') }}</a></td>
-                <td>{{ gestioncommande.idcommande }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('gestioncommande_show', { 'id': gestioncommande.idcommande }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('gestioncommande_edit', { 'id': gestioncommande.idcommande }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('gestioncommande_new') }}">Create a new entry</a>
-        </li>
-    </ul>
+    {{dump(gestioncommandes)}}
+    <div class="row">
+        <div class='col-sm-1'>
+        </div>
+        <div class='col-sm-10'>
+            <div class='well well-sm' style="box-shadow: 2px 2px 5px #656565; margin-top: 3px;">
+                <h3>Traitement de la commande N° {{gestioncommandes[0].idcommande}}</h3>
+            </div>
+        </div>
+        <div class='col-sm-1'>
+        </div>
+    </div>
+    
+    <div class='row'>
+        <div class='col-md-10 col-md-offset-1'>
+            <h2><small>Entreprise :</small> {{gestioncommandes[0].nomClient}}</h2>
+            <h3><small>Adresse :</small> {{gestioncommandes[0].adresse}}</h3>
+            <hr>
+            <h4><span class="glyphicon glyphicon-shopping-cart"></span> <u>Articles commandés</u></h4>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Quantité</th>
+                            <th>Préparés</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for article in gestioncommandes %}
+                        <tr>
+                            <td>{{article.nom}}</td>
+                            <td>{{article.quantite}}</td>
+                            <td class="col-xs-3 nb-articles-ajoutes">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name='1' placeholder="Saisir nombre" />
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+            <div class="col-md-6 col-md-offset-3">
+                    <a href="#" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span> Annuler</a>
+                    <a href="{{ path('validerCommande', {'id' : gestioncommandes[0].idcommande}) }}" class="btn btn-success pull-right"><span class="glyphicon glyphicon-ok"></span> Valider</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}
