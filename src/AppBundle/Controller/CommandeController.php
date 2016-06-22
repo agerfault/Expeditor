@@ -8,6 +8,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Commande;
 use AppBundle\Form\CommandeType;
+use AppBundle\Entity\Employe;
+use AppBundle\Repository\CommandeRepository;
+
 
 /**
  * Commande controller.
@@ -24,11 +27,17 @@ class CommandeController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $commandes = $em->getRepository('AppBundle:Gestioncommande')->findAll();
-        $employes = $em->getRepository('AppBundle:Employe')->findAll();
-
+        $em = $this ->getDoctrine()->getManager();
+        
+        $commandeRepository = new CommandeRepository($em);
+        $commandes =  $commandeRepository->findAllCommandes();
+        
+        
+        $repoEmploye = $em->getRepository('AppBundle:Employe');
+        $employes = $repoEmploye->findAll();
+        
+	
+        
         return $this->render('commande/liste_commandes.html.twig', ['commandes' => $commandes, 'employes' => $employes, 'active' => 'C']);
     }
 

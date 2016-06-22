@@ -59,14 +59,19 @@
             </tr>
         </thead>
         {% for commande in commandes %}
+            
             <tr>
-                <td class="text-center">{{commande.idcommande.idcommande}}</td>
-                <td class="text-center">{{commande.idcommande.idclient.nom}}</td>
-                <td class="text-center">{{commande.idCommande.date | date('d/m/Y')}}</td>
-                <td class="text-center"><span class="label label-{% if commande.idcommande.statut == "En attente" %}danger{% elseif commande.idcommande.statut == "En cours" %}warning{% else %}success{% endif %}">{{commande.idcommande.statut}}</span></td>
-                <td class="text-center">{{commande.idemploye.nom}}</td>
+                
+                
+                
+                <td class="text-center">{{commande.idcommande}}</td>
+               <td class="text-center">{{commande.nomcli}}</td>
+                 <td class="text-center">{{commande.date | date('d/m/Y')}}</td>
+                <td class="text-center"><span class="label label-{% if commande.statut == "En attente" %}danger{% elseif commande.statut == "En cours" %}warning{% else %}success{% endif %}">{{commande.statut}}</span></td>
+                <td class="text-center">{{ commande.nomemp }}</td>
                 <td class="text-center">{{commande.date | date('d/m/Y')}}</td>
-                <td class="text-center"><a class='btn btn-warning {% if commande.idcommande.statut != "En cours" %}disabled{% endif %}' href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+                <td class="text-center"><a class='btn btn-warning {% if commande.statut != "En cours" %}disabled{% endif %}' href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+            {# #}
             </tr>
         {% endfor %}
         </table>
