@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Employe;
 use AppBundle\Form\EmployeType;
+use AppBundle\Repository\GestioncommandeRepository;
+
 
 /**
  * Employe controller.
@@ -23,12 +25,25 @@ class EmployeController extends Controller
      * @Method("GET")
      */
     public function indexAction()
-    {
+    {   
         $em = $this->getDoctrine()->getManager();
-
+        
         $employes = $em->getRepository('AppBundle:Employe')->findAll();
+        
+        $gestionCommandeEmplRepository = new GestioncommandeRepository($em);
+        
+        foreach ($employes as $key => $unemp) {
+            
+            $gestioncommandesEmpl[$unemp->getIdemploye()] =  $gestionCommandeEmplRepository->NbCmdTraiteEmployeDuJour($unemp);
+            
+            
+        }
+	
 
-        return $this->render('employe/liste_employes.html.twig', ['employes' => $employes, 'active' => 'E']);
+        return $this->render('employe/liste_employes.html.twig', [ 
+            'nbcommandetraite' => $gestioncommandesEmpl,
+            'employes' => $employes, 
+            'active' => 'E']);
     }
 
     /**

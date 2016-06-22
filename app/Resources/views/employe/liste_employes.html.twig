@@ -57,6 +57,7 @@
                     <th class="text-center">ID</th>
                     <th class="text-center">NOM</th>
                     <th class="text-center">STATUT</th>
+                    <th class="text-center">Commande traité aujourd'hui</th>
                     <th class="text-center">Actions</th>
                 </tr>
             </thead>
@@ -65,6 +66,7 @@
                     <td class="text-center">{{employe.idemploye}}</td>
                     <td class="text-center">{{employe.nom}}</td>
                     <td class="text-center"><span class="label label-{% if employe.statut == 1 %}default{% else %}danger{% endif %}">{% if employe.statut == 1 %}Employé{% else %}Manager{% endif %}</span></td>
+                    <td class="text-center">{{ nbcommandetraite[employe.idemploye].1 }}</td>
                     <td class="text-center"><a class='btn btn-warning' href="#"><i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="#" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
                 </tr>
             {% endfor %}
