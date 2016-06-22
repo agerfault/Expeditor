@@ -8,7 +8,7 @@
     <id name="idgestioncommande" type="integer" column="IdGestionCommande">
       <generator strategy="IDENTITY"/>
     </id>
-    <field name="date" type="date" column="Date" nullable="false"/>
+    <field name="date" type="datetime" column="Date" nullable="false"/>
     <many-to-one field="idcommande" target-entity="Commande" fetch="LAZY">
       <join-columns>
         <join-column name="IdCommande" referenced-column-name="IdCommande"/>

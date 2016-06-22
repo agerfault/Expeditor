@@ -16,7 +16,7 @@
 
         <div class="row">
             <div class='col-sm-11'>
-                <div class='well well-sm' style="box-shadow: 2px 2px 5px #656565; margin-top: 3px;">
+                <div class='well well-sm well-title'>
                     <h4>Gestion des commandes</h4>
                 </div>
             </div>
@@ -32,15 +32,15 @@
             <div class='col-sm-4'>
                 <form class="form-inline">
                     <div class="form-group">
-                        <div class="input-group">
-                            <select class='select2'>
+                        <div class="input-group select-style">
+                            <select class='select2' name='selected'>
                                 {% for employe in employes %}
                                     <option>{{employe.nom}}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-sm"> Afficher</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
                 </form>
             </div>	
             <div class='col-sm-5'>
