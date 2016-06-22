@@ -26,7 +26,7 @@ class ArticleController extends Controller
     {
         $recherche = $request->request->all();
        
-        var_dump($recherche);
+        //var_dump($recherche);
         
         $em = $this->getDoctrine()->getManager();
 
