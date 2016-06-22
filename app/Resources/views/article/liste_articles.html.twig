@@ -47,7 +47,9 @@
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Rechercher" ><i class="fa fa-search" aria-hidden="true"></i></button>
-                    <a href='{{path('article_index')}}' data-toggle="tooltip" data-placement="top" title="" data-original-title="Annuler la recherche" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></a>
+                        {% if filtre %}
+                            <a href='{{path('article_index')}}' data-toggle="tooltip" data-placement="top" title="" data-original-title="Annuler la recherche" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></a>
+                        {% endif %}
                     </form>
                 </div>	
                 <div class='col-sm-5'>

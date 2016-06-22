@@ -22,27 +22,31 @@ class EmployeController extends Controller
      * Lists all Employe entities.
      *
      * @Route("/", name="employe_index")
-     * @Method("GET")
+     * @Method({"POST", "GET"}) (répliquer sur ce controller la recherche)
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {   
+        $recherche = $request->request->get('recherche');
         $em = $this->getDoctrine()->getManager();
-        
-        $employes = $em->getRepository('AppBundle:Employe')->findAll();
+        $employes_select = $em->getRepository('AppBundle:Employe')->findBy([], ['statut' => 'DESC']);
+        $isFiltred = false;
+        if($recherche != null) {
+            $employes = $em->getRepository('AppBundle:Employe')->findBy(['idemploye' => $recherche]);
+            $isFiltred = true;
+        } else {
+            $employes = $employes_select;
+        }
         
         $gestionCommandeEmplRepository = new GestioncommandeRepository($em);
         
         foreach ($employes as $key => $unemp) {
-            
             $gestioncommandesEmpl[$unemp->getIdemploye()] =  $gestionCommandeEmplRepository->NbCmdTraiteEmployeDuJour($unemp);
-            
-            
         }
-	
-
+        
         return $this->render('employe/liste_employes.html.twig', [ 
             'nbcommandetraite' => $gestioncommandesEmpl,
             'employes' => $employes, 
+            'filtre' => $isFiltred, 
             'active' => 'E']);
     }
 

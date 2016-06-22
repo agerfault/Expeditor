@@ -26,14 +26,20 @@ class ArticleController extends Controller
     {
         $recherche = $request->request->get('recherche');
         $em = $this->getDoctrine()->getManager();
-        $articles_select = $em->getRepository('AppBundle:Article')->findAll();
+        $articles_select = $em->getRepository('AppBundle:Article')->findBy([], ['nom' => 'ASC']);
+        $isFiltred = false;
        
         if($recherche != null) {
             $articles = $em->getRepository('AppBundle:Article')->findBy(['idarticle' => $recherche]);
+            $isFiltred = true;
         } else {
             $articles = $articles_select;
         }
-        return $this->render('article/liste_articles.html.twig', ['articles' => $articles, 'articles_select' => $articles_select, 'active' => 'A']);
+        return $this->render('article/liste_articles.html.twig',
+                ['articles' => $articles,
+                'articles_select' => $articles_select,
+                'filtre' => $isFiltred,
+                'active' => 'A']);
     }
 
     /**

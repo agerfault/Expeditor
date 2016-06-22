@@ -7,6 +7,9 @@
         $(document).ready(function() { 
         $(".select2").select2({ width: '100%' });
         });
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
     </script>
 {% endblock %}
 
@@ -43,7 +46,10 @@
                             </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Recherche"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Rechercher"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    {% if filtre %}
+                        <a href='{{path('employe_index')}}' data-toggle="tooltip" data-placement="top" title="" data-original-title="Annuler la recherche" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></a>
+                    {% endif %}
                 </form>
 
                 </div>	
@@ -67,8 +73,8 @@
                     <td class="text-center">{{employe.nom}}</td>
                     <td class="text-center"><span class="label label-{% if employe.statut == 1 %}default{% else %}danger{% endif %}">{% if employe.statut == 1 %}Employé{% else %}Manager{% endif %}</span></td>
 
-                    <td class="text-center">{{ nbcommandetraite[employe.idemploye].1 }}</td>
-                    <td class="text-center"><a class='btn btn-warning' href="{{path('employe_edit', {'id' : employe.idemploye})}}"><i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="{{path('employe_delete', {'id' : employe.idemploye})}}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                    <td class="text-center"><span class="badge">{{ nbcommandetraite[employe.idemploye].1 }}</span></td>
+                    <td class="text-center"><a class='btn btn-warning' href="{{path('employe_edit', {'id' : employe.idemploye})}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Modifier" ><i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="{{path('employe_delete', {'id' : employe.idemploye})}}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Supprimer" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
 
                 </tr>
             {% endfor %}
