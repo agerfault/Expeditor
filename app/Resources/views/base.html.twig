@@ -15,10 +15,11 @@
         <link rel="stylesheet" href="{{asset('bundles/framework/css/font-awesome.min.css')}}" media="screen">
         <link rel="stylesheet" href="{{asset('bundles/framework/css/style-general.css')}}" media="screen">
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        {% block stylesheets %}
-            <style>
+        <style>
                 .flash-messages .alert{position:absolute;}
-            </style>
+        </style>
+        {% block stylesheets %}
+            
         {% endblock %}
     </head>
     <body>

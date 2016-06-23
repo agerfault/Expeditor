@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container">
+   <!-- <div class="container">
       <form class="form-signin" action="{{ path('seConnecter') }}" method="POST">
             <h2 class="form-signin-heading">Expeditor</h2>
             <label for="inputIdentifiant" class="sr-only">Identifiant</label>
@@ -19,6 +19,42 @@
             <button class="btn btn-lg btn-primary btn-block" type="submit">Se connecter</button>
       </form>
 
-    </div>
+    </div> -->
+<div>  
+<div class="wrapper">
+	<div class="container">
+                 
+		<h1>Expeditor</h1>
+		 <form class="form" action="{{ path('seConnecter') }}" method="POST">
+			<input type="text" placeholder="Identifiant" name="identifiant" required>
+			<input type="password" placeholder="Mot de passe" name="motDePasse" required>
+			<button type="submit" id="login-button">Se connecter</button>
+		</form>
+	</div>
+	
+
+</div>
+                    
+<ul class="bg-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+</ul>
+   </div>
+<script>
+        $("#login-button").click(function(event){
+                        
+                $('form').fadeOut(200);
+                $('.wrapper').addClass('form-success');
+       });
+</script>
+
 {% endblock %}
 
