@@ -33,7 +33,6 @@ class CommandeRepository extends EntityRepository {
         return $query->getArrayResult();
     }
 
-<<<<<<< HEAD
     public function findCommandesByIdEmploye($idemploye) {
         
         $query = $this->getEntityManager()
@@ -63,18 +62,4 @@ class CommandeRepository extends EntityRepository {
         return $query->getArrayResult();
     }
 
-    public function findCommandesByStatutAndIdEmploye($statut, $idemploye) {
-        
-=======
-    
-    public function insertCommande($date,$statut,$idclient) {
->>>>>>> origin/master
-        $query = $this->getEntityManager()
-                        ->createQuery(
-                'INSERT INTO AppBundle:Commande(date,statut,idclient) VALUES(?,?,?)')
-                ->setParameter(1, $date)
-                ->setParameter(2, $statut)
-                ->setParameter(3, $idclient);
-        return $query->execute();
-    }
 }
