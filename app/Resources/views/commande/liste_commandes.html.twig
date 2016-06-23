@@ -74,7 +74,7 @@
                 <td class="text-center"><span class="label label-{% if commande.statut == "EA" %}danger{% elseif commande.statut == "EC" %}warning{% else %}success{% endif %}">{% if commande.statut == "EA" %}En attente{% elseif commande.statut == "EC" %}En cours{% else %}Terminée{% endif %}</span></td>
                 <td class="text-center">{% if commande.nomemp is null %}-{% else %}{{ commande.nomemp }}{% endif %}</td>
                 <td class="text-center">{{commande.date | date('d/m/Y')}}</td>
-                <td class="text-center"><a class='btn btn-warning {% if commande.statut != "EC" %}disabled{% endif %}' href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Modifier affectation" ><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+                <td class="text-center"><a class='btn btn-warning {% if commande.statut != "EC" %}disabled{% endif %}' href="{% if commande.idgestioncommande is not null %}{{path('gestioncommande_edit', {'id' : commande.idgestioncommande})}}{% else %}#{% endif %}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Modifier affectation" ><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
             </tr>
         {% endfor %}
         </table>

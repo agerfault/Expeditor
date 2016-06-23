@@ -61,35 +61,35 @@ class GestioncommandeController extends Controller
      */
     public function validerCommandeAction(Request $request)
     {
-		 $idCde = $request->query->get('id');
+        $idCde = $request->query->get('id');
 		 
         $em = $this->getDoctrine()->getManager();
         //Récupération de la première commande non traité
-	    $ligneArticle = $em->getRepository('AppBundle:Lignearticle')->findBy(['idcommande' => $idCde]);
+        $ligneArticle = $em->getRepository('AppBundle:Lignearticle')->findBy(['idcommande' => $idCde]);
 		
-		$tabElementsSaisis = $request->request->all();
-		$i=0;
+        $tabElementsSaisis = $request->request->all();
+        $i=0;
 		
         foreach($ligneArticle as $maLigne)
         {
-                if($maLigne->getQuantite() == $tabElementsSaisis['articles'][$i])
-                {
-					$gestionCommandeRepository = new GestioncommandeRepository($em);
-					$gestionCommandeRepository->changerStatutCommande('T',$idCde);
-					//return $this->redirectToRoute('pdf_bonlivraison', ['commande_id' => $idCde]);
-					
-                    return $this->render('gestioncommande/impression_bl.html.twig',['idCde' => $idCde]);
-					//redirectToRoute('gestioncommande_index');
-                }
-                else
-                {
-					$this->addFlash('erreur', 'Merci de vérifier les quantités saisies');
-					$gestionCommandeRepository = new GestioncommandeRepository($em);
-					$gestionCommandeRepository->changerStatutCommande('EA',$idCde);
+            if($maLigne->getQuantite() == $tabElementsSaisis['articles'][$i])
+            {
+                $gestionCommandeRepository = new GestioncommandeRepository($em);
+                $gestionCommandeRepository->changerStatutCommande('T',$idCde);
+                //return $this->redirectToRoute('pdf_bonlivraison', ['commande_id' => $idCde]);
 
-                    return $this->redirectToRoute('gestioncommande_index');
-                }
-				$i++;
+                return $this->render('gestioncommande/impression_bl.html.twig',['idCde' => $idCde]);
+                //redirectToRoute('gestioncommande_index');
+            }
+            else
+            {
+                $this->addFlash('erreur', 'Merci de vérifier les quantités saisies');
+                $gestionCommandeRepository = new GestioncommandeRepository($em);
+                $gestionCommandeRepository->changerStatutCommande('EA',$idCde);
+
+                return $this->redirectToRoute('gestioncommande_index');
+            }
+            $i++;
         }    
     }
 
@@ -125,7 +125,7 @@ class GestioncommandeController extends Controller
      *
      * @Route("/{id}", name="gestioncommande_show")
      * @Method("GET")
-     */
+    
     public function showAction(Gestioncommande $gestioncommande)
     {
         $deleteForm = $this->createDeleteForm($gestioncommande);
@@ -135,7 +135,7 @@ class GestioncommandeController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
-
+ */
     /**
      * Displays a form to edit an existing Gestioncommande entity.
      *
@@ -144,23 +144,36 @@ class GestioncommandeController extends Controller
      */
     public function editAction(Request $request, Gestioncommande $gestioncommande)
     {
-        $deleteForm = $this->createDeleteForm($gestioncommande);
-        $editForm = $this->createForm('AppBundle\Form\GestioncommandeType', $gestioncommande);
-        $editForm->handleRequest($request);
+        $new_affectation = $request->request->get('affectation');
+        $em = $this->getDoctrine()->getManager();
+        $employes = $em->getRepository('AppBundle:Employe')->findAll();
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+        if ($new_affectation != null) {
+            $employe = $em->getRepository('AppBundle:Employe')->findBy(['idemploye' => $new_affectation])[0];
+            $em->getRepository('AppBundle:Gestioncommande');
+            $gestioncommande->setIdemploye($employe);
             $em->persist($gestioncommande);
             $em->flush();
-
-            return $this->redirectToRoute('gestioncommande_edit', array('id' => $gestioncommande->getId()));
+            return $this->redirectToRoute('commande_index');
         }
 
-        return $this->render('gestioncommande/edit.html.twig', array(
-            'gestioncommande' => $gestioncommande,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $this->render('gestioncommande/edit.html.twig',
+                ['employes' => $employes,
+                'idcommande' => $gestioncommande->getIdgestioncommande()]);
+    }
+    
+    /**
+     * @Route("/{id}/liberercommande", name="liberer_commande")
+     * @Method({"GET", "POST"})
+     */
+    public function libererCommandeAction(Request $request, Gestioncommande $gestioncommande)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $gestioncommande->getIdcommande()->setStatut('EA');
+        $em->persist($gestioncommande->getIdcommande());
+        $em->remove($gestioncommande);
+        $em->flush();
+        return $this->redirectToRoute('commande_index');
     }
 
     /**
@@ -168,7 +181,7 @@ class GestioncommandeController extends Controller
      *
      * @Route("/{id}", name="gestioncommande_delete")
      * @Method("DELETE")
-     */
+     
     public function deleteAction(Request $request, Gestioncommande $gestioncommande)
     {
         $form = $this->createDeleteForm($gestioncommande);
@@ -182,7 +195,8 @@ class GestioncommandeController extends Controller
 
         return $this->redirectToRoute('gestioncommande_index');
     }
-
+*/
+    
     /**
      * Creates a form to delete a Gestioncommande entity.
      *
