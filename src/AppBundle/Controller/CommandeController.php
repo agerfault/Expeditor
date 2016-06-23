@@ -178,7 +178,12 @@ class CommandeController extends Controller {
     public function indexfiltredAction(Request $request, $statut) {
         if ($statut != 'ALL') {
             $recherche = $request->request->get('recherche');
+            
             $em = $this->getDoctrine()->getManager();
+
+            $employeRepo = new EmployeRepository($em);
+            $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        
             $commandeRepository = new CommandeRepository($em);
 
             $commandes = $commandeRepository->findCommandesByStatut($statut);
@@ -213,6 +218,8 @@ class CommandeController extends Controller {
         $commande = new Commande();
         $form = $this->createForm('AppBundle\Form\CommandeType', $commande);
         $form->handleRequest($request);
+        
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();

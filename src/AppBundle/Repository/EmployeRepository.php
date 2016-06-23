@@ -57,7 +57,7 @@ class EmployeRepository {
             throw new AccessDeniedException('Vous n\'avez pas la permission d\'accéder à cette page.');
         }
         if($employe->getStatut() != $statut){
-            //throw new AccessDeniedException('Vous n\'avez pas la permission d\'accéder à cette page.');
+            throw new AccessDeniedException('Vous n\'avez pas la permission d\'accéder à cette page.');
         }
     }
 }
