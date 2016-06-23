@@ -20,15 +20,26 @@ class ArticleController extends Controller
      * Lists all Article entities.
      *
      * @Route("/", name="article_index")
-     * @Method("GET")
+     * @Method({"POST", "GET"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
+        $recherche = $request->request->get('recherche');
         $em = $this->getDoctrine()->getManager();
-
-        $articles = $em->getRepository('AppBundle:Article')->findAll();
-
-        return $this->render('article/liste_articles.html.twig', ['articles' => $articles, 'active' => 'A']);
+        $articles_select = $em->getRepository('AppBundle:Article')->findBy([], ['nom' => 'ASC']);
+        $isFiltred = false;
+       
+        if($recherche != null) {
+            $articles = $em->getRepository('AppBundle:Article')->findBy(['idarticle' => $recherche]);
+            $isFiltred = true;
+        } else {
+            $articles = $articles_select;
+        }
+        return $this->render('article/liste_articles.html.twig',
+                ['articles' => $articles,
+                'articles_select' => $articles_select,
+                'filtre' => $isFiltred,
+                'active' => 'A']);
     }
 
     /**
@@ -111,7 +122,6 @@ class ArticleController extends Controller
         $em->remove($article);
         $em->flush();
 
-        $articles = $em->getRepository('AppBundle:Article')->findAll();
         return $this->redirectToRoute('article_index');
         
     }

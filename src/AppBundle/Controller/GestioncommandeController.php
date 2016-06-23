@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Gestioncommande;
 use AppBundle\Form\GestioncommandeType;
 use AppBundle\Repository\GestioncommandeRepository;
+use AppBundle\Repository\EmployeRepository;
+use AppBundle\Enumeration\StatutEmployeEnum;
 
 /**
  * Gestioncommande controller.
@@ -25,19 +27,27 @@ class GestioncommandeController extends Controller
      */
     public function indexAction()
     {
-        /*$em = $this->getDoctrine()->getManager();
-		
-		//Récupération de la première commande non traité
-		$gestioncommandes = $em->getRepository('AppBundle:Gestioncommande')->getGestionCommande('EC');
-
-		dump($gestioncommandes);*/
-		
 		  $em = $this ->getDoctrine()
                               ->getManager();
         
+        $employeRepo = new EmployeRepository($em);
+        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::EMPLOYE);
+                  
         $gestionCommandeRepository = new GestioncommandeRepository($em);
         $gestioncommandes =  $gestionCommandeRepository->findCommandeEnAttente();
+		
+		if (!$gestioncommandes)
+		{
+			var_dump('Sorry bro\' T O chomage teknik !');
+			exit();
+		}
+		else
+		{
+			$gestionCommandeRepository->changerStatutCommande('EC',$gestioncommandes[0]['idcommande']);
+		}
 	
+		
+		
         return $this->render('gestioncommande/index.html.twig', array(
             'gestioncommandes' => $gestioncommandes,
         ));
@@ -47,31 +57,42 @@ class GestioncommandeController extends Controller
      * Valider la saisie de la commande de l'employé
      *
      * @Route("/validerCommande", name="validerCommande")
-     * @Method("POST")
+     * @Method({"GET","POST"})
      */
     public function validerCommandeAction(Request $request)
     {
+		 $idCde = $request->query->get('id');
+		 
         $em = $this->getDoctrine()->getManager();
         //Récupération de la première commande non traité
-	$ligneArticle = $em->getRepository('AppBundle:Lignearticle')->findBy(['idcommande' => 1]); //1 la valeur passer par alex
-        
-        $tabElementsSaisis = $request->request->all();
-        
+	    $ligneArticle = $em->getRepository('AppBundle:Lignearticle')->findBy(['idcommande' => $idCde]);
+		
+		$tabElementsSaisis = $request->request->all();
+		$i=0;
+		
         foreach($ligneArticle as $maLigne)
         {
-            foreach($tabElementsSaisis as $article)
-            {
-                if($maLigne->quantite == $article)
+                if($maLigne->getQuantite() == $tabElementsSaisis['articles'][$i])
                 {
-                    return true;
+					$gestionCommandeRepository = new GestioncommandeRepository($em);
+					$gestionCommandeRepository->changerStatutCommande('T',$idCde);
+					//return $this->redirectToRoute('pdf_bonlivraison', ['commande_id' => $idCde]);
+					
+                    return $this->render('gestioncommande/impression_bl.html.twig',['idCde' => $idCde]);
+					//redirectToRoute('gestioncommande_index');
                 }
                 else
                 {
-                    return false;
+					$this->addFlash('erreur', 'Merci de vérifier les quantités saisies');
+					$gestionCommandeRepository = new GestioncommandeRepository($em);
+					$gestionCommandeRepository->changerStatutCommande('EA',$idCde);
+
+                    return $this->redirectToRoute('gestioncommande_index');
                 }
-            }
+				$i++;
         }    
     }
+
 
     /**
      * Creates a new Gestioncommande entity.

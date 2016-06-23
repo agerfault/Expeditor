@@ -1,11 +1,14 @@
 {% extends 'default_manager.html.twig' %}
 
-{% block title %}{{parent()}}- Commandes{% endblock %}
+{% block title %}{{parent()}}- Employés{% endblock %}
 
 {% block javascripts %}
     <script>
         $(document).ready(function() { 
         $(".select2").select2({ width: '100%' });
+        });
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
         });
     </script>
 {% endblock %}
@@ -16,7 +19,7 @@
 
             <div class="row">
                 <div class='col-sm-11'>
-                    <div class='well well-sm' style="box-shadow: 2px 2px 5px #656565; margin-top: 3px;">
+                    <div class='well well-sm well-title'>
                         <h4>Gestion des employés</h4>
                     </div>
                 </div>
@@ -33,17 +36,20 @@
                 </div>
                 <div class='col-sm-4'>
                     
-                <form class="form-inline">
+                <form class="form-inline" method='POST' action='{{path('employe_index')}}' >
                     <div class="form-group">
-                        <div class="input-group">
-                            <select class='select2'>
+                        <div class="input-group select-style">
+                            <select class='select2' name='recherche' >
                                 {% for employe in employes %}
-                                    <option>{{employe.nom}}</option>
+                                    <option value='{{employe.idemploye}}'>{{employe.nom}}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary"> Afficher</button>
+                    <button type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="" data-original-title="Rechercher"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    {% if filtre %}
+                        <a href='{{path('employe_index')}}' data-toggle="tooltip" data-placement="top" title="" data-original-title="Annuler la recherche" class="btn btn-danger"><i class="fa fa-times" aria-hidden="true"></i></a>
+                    {% endif %}
                 </form>
 
                 </div>	
@@ -67,8 +73,8 @@
                     <td class="text-center">{{employe.nom}}</td>
                     <td class="text-center"><span class="label label-{% if employe.statut == 1 %}default{% else %}danger{% endif %}">{% if employe.statut == 1 %}Employé{% else %}Manager{% endif %}</span></td>
 
-                    <td class="text-center">{{ nbcommandetraite[employe.idemploye].1 }}</td>
-                    <td class="text-center"><a class='btn btn-warning' href="{{path('employe_edit', {'id' : employe.idemploye})}}"><i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="{{path('employe_edit', {'id' : employe.idemploye})}}" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+                    <td class="text-center"><span class="badge">{{ nbcommandetraite[employe.idemploye].1 }}</span></td>
+                    <td class="text-center"><a class='btn btn-warning' href="{{path('employe_edit', {'id' : employe.idemploye})}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Modifier" ><i class="fa fa-pencil" aria-hidden="true"></i></a> <a href="{{path('employe_delete', {'id' : employe.idemploye})}}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="Supprimer" ><i class="fa fa-trash" aria-hidden="true"></i></a></td>
 
                 </tr>
             {% endfor %}
