@@ -33,6 +33,7 @@ class CommandeRepository extends EntityRepository {
         return $query->getArrayResult();
     }
 
+<<<<<<< HEAD
     public function findCommandesByIdEmploye($idemploye) {
         
         $query = $this->getEntityManager()
@@ -64,17 +65,16 @@ class CommandeRepository extends EntityRepository {
 
     public function findCommandesByStatutAndIdEmploye($statut, $idemploye) {
         
+=======
+    
+    public function insertCommande($date,$statut,$idclient) {
+>>>>>>> origin/master
         $query = $this->getEntityManager()
                         ->createQuery(
-                            'SELECT e.nom as nomemp, c.idcommande, c.date, c.statut, cli.nom as nomcli '
-                                . 'FROM AppBundle:Commande c '
-                                . 'LEFT JOIN AppBundle:Gestioncommande gc WITH gc.idcommande = c.idcommande '
-                                . 'LEFT JOIN AppBundle:Employe e WITH e.idemploye = gc.idemploye '
-                                . 'LEFT JOIN AppBundle:Client cli WITH c.idclient = cli.idclient '
-                                . 'WHERE c.statut = :statut AND e.idemploye = :idemploye ');
-        $query->setParameter('statut', $statut);
-        $query->setParameter('idemploye', $idemploye);
-        return $query->getArrayResult();
+                'INSERT INTO AppBundle:Commande(date,statut,idclient) VALUES(?,?,?)')
+                ->setParameter(1, $date)
+                ->setParameter(2, $statut)
+                ->setParameter(3, $idclient);
+        return $query->execute();
     }
-
 }
