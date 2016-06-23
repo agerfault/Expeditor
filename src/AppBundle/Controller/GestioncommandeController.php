@@ -36,26 +36,29 @@ class GestioncommandeController extends Controller {
         $gestionCommandeRepository = new GestioncommandeRepository($em);
         $gestioncommandes = $gestionCommandeRepository->findCommandeEnAttente();
         
-        $gestionCommandeRepository->changerStatutCommande('EC', $gestioncommandes[0]['idcommande']);
-
-        $date = new \DateTime();
-        $session = new Session();
-
-        $employe = $session->get('employe');
-        try{
-            $gestionCommandeRepository->insertCdeEmp($employe->getIdemploye(), $gestioncommandes[0]['idcommande'], $date->format('Y-m-d H:i:s'));
-        }
-        catch(\Exception $ex){
-            $this->addFlash('erreur', $ex->getMessage());
-        }
-        if (!$gestioncommandes) {
+          if (!$gestioncommandes) {
             var_dump('Sorry bro\' T O chomage teknik !');
             exit();
+        }else{
+            
+            $gestionCommandeRepository->changerStatutCommande('EC', $gestioncommandes[0]['idcommande']);
+
+            $date = new \DateTime();
+            $session = new Session();
+
+            $employe = $session->get('employe');
+            try {
+                $gestionCommandeRepository->insertCdeEmp($employe->getIdemploye(), $gestioncommandes[0]['idcommande'], $date->format('Y-m-d H:i:s'));
+            } catch (\Exception $ex) {
+                $this->addFlash('erreur', $ex->getMessage());
+            }
+
+            return $this->render('gestioncommande/index.html.twig', array(
+                        'gestioncommandes' => $gestioncommandes,
+            ));
         }
 
-        return $this->render('gestioncommande/index.html.twig', array(
-                    'gestioncommandes' => $gestioncommandes,
-        ));
+       
     }
 
     /**
@@ -76,12 +79,7 @@ class GestioncommandeController extends Controller {
 
         foreach ($ligneArticle as $maLigne) {
             if ($maLigne->getQuantite() == $tabElementsSaisis['articles'][$i]) {
-                $gestionCommandeRepository = new GestioncommandeRepository($em);
-                $gestionCommandeRepository->changerStatutCommande('T', $idCde);
-                //return $this->redirectToRoute('pdf_bonlivraison', ['commande_id' => $idCde]);
-
-                return $this->render('gestioncommande/impression_bl.html.twig', ['idCde' => $idCde]);
-                //redirectToRoute('gestioncommande_index');
+                $i++;
             } else {
                 $this->addFlash('erreur', 'Merci de vérifier les quantités saisies');
                 $gestionCommandeRepository = new GestioncommandeRepository($em);
@@ -89,8 +87,11 @@ class GestioncommandeController extends Controller {
 
                 return $this->redirectToRoute('gestioncommande_index');
             }
-            $i++;
         }
+        $gestionCommandeRepository = new GestioncommandeRepository($em);
+        $gestionCommandeRepository->changerStatutCommande('T', $idCde);
+
+        return $this->render('gestioncommande/impression_bl.html.twig', ['idCde' => $idCde]);
     }
 
     /**
@@ -119,78 +120,27 @@ class GestioncommandeController extends Controller {
     }
 
     /**
-     * Finds and displays a Gestioncommande entity.
-     *
-     * @Route("/{id}", name="gestioncommande_show")
-     * @Method("GET")
-     */
-    public function showAction(Gestioncommande $gestioncommande) {
-        $deleteForm = $this->createDeleteForm($gestioncommande);
-
-        return $this->render('gestioncommande/show.html.twig', array(
-                    'gestioncommande' => $gestioncommande,
-                    'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
      * Displays a form to edit an existing Gestioncommande entity.
      *
      * @Route("/{id}/edit", name="gestioncommande_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Gestioncommande $gestioncommande) {
-        $deleteForm = $this->createDeleteForm($gestioncommande);
-        $editForm = $this->createForm('AppBundle\Form\GestioncommandeType', $gestioncommande);
-        $editForm->handleRequest($request);
+        $new_affectation = $request->request->get('affectation');
+        $em = $this->getDoctrine()->getManager();
+        $employes = $em->getRepository('AppBundle:Employe')->findAll();
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+        if ($new_affectation != null) {
+            $employe = $em->getRepository('AppBundle:Employe')->findBy(['idemploye' => $new_affectation])[0];
+            $em->getRepository('AppBundle:Gestioncommande');
+            $gestioncommande->setIdemploye($employe);
             $em->persist($gestioncommande);
             $em->flush();
-
-            return $this->redirectToRoute('gestioncommande_edit', array('id' => $gestioncommande->getId()));
+            return $this->redirectToRoute('commande_index');
         }
 
-        return $this->render('gestioncommande/edit.html.twig', array(
-                    'gestioncommande' => $gestioncommande,
-                    'edit_form' => $editForm->createView(),
-                    'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
-     * Deletes a Gestioncommande entity.
-     *
-     * @Route("/{id}", name="gestioncommande_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, Gestioncommande $gestioncommande) {
-        $form = $this->createDeleteForm($gestioncommande);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($gestioncommande);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('gestioncommande_index');
-    }
-
-    /**
-     * Creates a form to delete a Gestioncommande entity.
-     *
-     * @param Gestioncommande $gestioncommande The Gestioncommande entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Gestioncommande $gestioncommande) {
-        return $this->createFormBuilder()
-                        ->setAction($this->generateUrl('gestioncommande_delete', array('id' => $gestioncommande->getId())))
-                        ->setMethod('DELETE')
-                        ->getForm()
-        ;
+        return $this->render('gestioncommande/edit.html.twig', ['employes' => $employes,
+                    'idcommande' => $gestioncommande->getIdgestioncommande()]);
     }
 
 }
