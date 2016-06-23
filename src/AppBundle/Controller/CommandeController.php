@@ -115,21 +115,22 @@ class CommandeController extends Controller {
         return $this->redirectToRoute('commande_index');
     }
 
-    /**
-     * Lists all Commande entities.
-     *
-     * @Route("/", name="commande_index")
-     * @Method({"POST", "GET"})
-     */
-    public function indexAction() {
+    
+    /*public function indexAction() {
         $em = $this->getDoctrine()->getManager();
 
         $commandes = $em->getRepository('AppBundle:Gestioncommande')->findAll();
         $employes = $em->getRepository('AppBundle:Employe')->findAll();
 
         return $this->render('commande/liste_commandes.html.twig', ['commandes' => $commandes, 'employes' => $employes, 'active' => 'C']);
-    }
+    }*/
     
+    /**
+     * Lists all Commande entities.
+     *
+     * @Route("/", name="commande_index")
+     * @Method({"POST", "GET"})
+     */
     public function indexAction(Request $request)
     {
         $recherche = $request->request->get('recherche');
