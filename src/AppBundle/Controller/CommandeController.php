@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Employe;
 use AppBundle\Repository\CommandeRepository;
 use AppBundle\Tools\ImportFichier;
+use AppBundle\Repository\EmployeRepository;
+use AppBundle\Enumeration\StatutEmployeEnum;
 
 /**
  * Commande controller.
@@ -143,6 +145,10 @@ class CommandeController extends Controller {
     public function indexAction(Request $request) {
         $recherche = $request->request->get('recherche');
         $em = $this->getDoctrine()->getManager();
+        
+        $employeRepo = new EmployeRepository($em);
+        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        
         $commandeRepository = new CommandeRepository($em);
         $commandes = $commandeRepository->findAllCommandes();
 

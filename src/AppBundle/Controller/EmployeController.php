@@ -10,6 +10,9 @@ use AppBundle\Entity\Employe;
 use AppBundle\Form\EmployeType;
 use AppBundle\Repository\GestioncommandeRepository;
 
+use AppBundle\Repository\EmployeRepository;
+use AppBundle\Enumeration\StatutEmployeEnum;
+
 
 /**
  * Employe controller.
@@ -28,6 +31,12 @@ class EmployeController extends Controller
     {   
         $recherche = $request->request->get('recherche');
         $em = $this->getDoctrine()->getManager();
+        
+        
+        $employeRepo = new EmployeRepository($em);
+        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        
+        
         $employes_select = $em->getRepository('AppBundle:Employe')->findBy([], ['statut' => 'DESC']);
         $isFiltred = false;
         
@@ -62,9 +71,14 @@ class EmployeController extends Controller
         $employe = new Employe();
         $form = $this->createForm('AppBundle\Form\EmployeType', $employe);
         $form->handleRequest($request);
-
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $employeRepo = new EmployeRepository($em);
+        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        
+        
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $employe->setMotdepasse(md5($employe->getMotdepasse()));
             $em->persist($employe);
             $em->flush();
@@ -102,6 +116,13 @@ class EmployeController extends Controller
      */
     public function editAction(Request $request, Employe $employe)
     {
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $employeRepo = new EmployeRepository($em);
+        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        
+        
         $editForm = $this->createForm('AppBundle\Form\EmployeType', $employe);
         $editForm->handleRequest($request);
         if (!$editForm->isSubmitted()) {
@@ -110,7 +131,6 @@ class EmployeController extends Controller
         }
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $employe->setMotdepasse(md5($employe->getMotdepasse()));
             $em->persist($employe);
             $em->flush();
@@ -129,6 +149,10 @@ class EmployeController extends Controller
     public function deleteAction(Request $request, Employe $employe)
     {
         $em = $this->getDoctrine()->getManager();
+        
+        $employeRepo = new EmployeRepository($em);
+        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        
         $em->getRepository('AppBundle:Employe')->findAll();
         $em->remove($employe);
         $em->flush();

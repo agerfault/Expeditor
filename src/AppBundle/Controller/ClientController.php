@@ -9,6 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Client;
 use AppBundle\Form\ClientType;
 
+use AppBundle\Repository\EmployeRepository;
+use AppBundle\Enumeration\StatutEmployeEnum;
+
 /**
  * Client controller.
  *
@@ -25,6 +28,10 @@ class ClientController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        
+        
+        $employeRepo = new EmployeRepository($em);
+        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
 
         $clients = $em->getRepository('AppBundle:Client')->findAll();
 

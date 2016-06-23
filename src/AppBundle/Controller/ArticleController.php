@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Article;
 use AppBundle\Form\ArticleType;
+use AppBundle\Repository\EmployeRepository;
+use AppBundle\Enumeration\StatutEmployeEnum;
 
 /**
  * Article controller.
@@ -26,6 +28,10 @@ class ArticleController extends Controller
     {
         $recherche = $request->request->get('recherche');
         $em = $this->getDoctrine()->getManager();
+        
+        $employeRepo = new EmployeRepository($em);
+        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        
         $articles_select = $em->getRepository('AppBundle:Article')->findBy([], ['nom' => 'ASC']);
         $isFiltred = false;
        
