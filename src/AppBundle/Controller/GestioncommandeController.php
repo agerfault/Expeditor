@@ -49,8 +49,7 @@ class GestioncommandeController extends Controller {
             $gestioncommandes = $gestionCommandeRepository->findCommandeEnAttente();
 
             if (!$gestioncommandes) {
-                var_dump('Sorry bro\' T O chomage teknik !');
-                exit();
+                return $this->render('commande/aucune_commande.html.twig', array());
             }else{
                 $gestionCommandeRepository->changerStatutCommande('EC', $gestioncommandes[0]['idcommande']);
 

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}}- Aucune commande{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+        body { background-image: url("{{asset('images/aucune-commande.jpg')}}"); background-attachment: fixed; background-position: center; background-repeat: no-repeat;}
+    </style>
+{% endblock %}
+{% block meta %}
+    <META HTTP-EQUIV="refresh" CONTENT="5; URL={{ path(app.request.get('_route')) }}">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class='col-sm-1'>
+        </div>
+        <div class='col-sm-10'>
+            <div class='well well-sm well-title'>
+                <h1>Toutes les commandes ont été traitées !</h1>
+                <a  class="btn-deconnexion pull-right" href="{{ path('seDeconnecter') }}"><i class="fa fa-power-off"></i></a>
+            </div>
+        </div>
+        <div class='col-sm-1'>
+        </div>
+    </div>
+    
+{% endblock %}

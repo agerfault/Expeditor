@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Article;
 use AppBundle\Form\ArticleType;
+use AppBundle\Repository\EmployeRepository;
+use AppBundle\Enumeration\StatutEmployeEnum;
 
 /**
  * Article controller.
@@ -26,6 +28,10 @@ class ArticleController extends Controller
     {
         $recherche = $request->request->get('recherche');
         $em = $this->getDoctrine()->getManager();
+        
+        $employeRepo = new EmployeRepository($em);
+        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        
         $articles_select = $em->getRepository('AppBundle:Article')->findBy([], ['nom' => 'ASC']);
         $isFiltred = false;
        
@@ -53,9 +59,13 @@ class ArticleController extends Controller
         $article = new Article();
         $form = $this->createForm('AppBundle\Form\ArticleType', $article);
         $form->handleRequest($request);
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $employeRepo = new EmployeRepository($em);
+        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $article->setNom($form->get('nom')->getData());
             $article->setPoids($form->get('poids')->getData());
             $em->persist($article);
@@ -95,8 +105,12 @@ class ArticleController extends Controller
         $editForm = $this->createForm('AppBundle\Form\ArticleType', $article);
         $editForm->handleRequest($request);
 
+        $em = $this->getDoctrine()->getManager();
+        
+        $employeRepo = new EmployeRepository($em);
+        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();
 
@@ -118,6 +132,11 @@ class ArticleController extends Controller
     public function deleteAction(Request $request, Article $article)
     {
         $em = $this->getDoctrine()->getManager();
+        
+        $employeRepo = new EmployeRepository($em);
+        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        
+        
         $em->getRepository('AppBundle:Article')->findAll();
         $em->remove($article);
         $em->flush();

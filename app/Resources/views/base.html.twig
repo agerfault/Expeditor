@@ -15,11 +15,18 @@
         <link rel="stylesheet" href="{{asset('bundles/framework/css/font-awesome.min.css')}}" media="screen">
         <link rel="stylesheet" href="{{asset('bundles/framework/css/style-general.css')}}" media="screen">
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <style>
-                .flash-messages .alert{position:absolute;}
-        </style>
-        {% block stylesheets %}
+        
+        {% block meta %}
             
+        {% endblock %}
+        
+        {% block stylesheets %}
+            <style>
+                .flash-messages .alert{position:absolute;}
+                a.btn-deconnexion {border-radius: 60px;background-color: #F44336;color: #FFF;font-size: 30px;padding: 10px 19px;margin-top: -60px;}
+                a.btn-deconnexion:hover{background-color: #FFF;color: #F44336;}
+            </style>
+
         {% endblock %}
     </head>
     <body>
