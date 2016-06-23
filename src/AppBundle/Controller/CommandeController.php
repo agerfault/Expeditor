@@ -12,7 +12,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Employe;
 use AppBundle\Repository\CommandeRepository;
-
+use AppBundle\Tools\ImportFichier;
 
 /**
  * Commande controller.
@@ -25,167 +25,173 @@ class CommandeController extends Controller {
      * Import a Commande entity.
      *
      * @Route("/import", name="commande_import")
-     * @Method("GET")
+     * @Method("POST")
      */
-    public function importAction() {
+    public function importAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
-        
-        $fichier = "C:\Users\d1412mercierc\Desktop\JEU DE DONNEES\Jeux de commandes clientes en CSV.csv";
 
 
         $import = new Importation();
 
 
-        $importation = $import->import_commande($fichier);
+        $importation = $import->import_commande($request->files->get('file'));
 
         $compteur = 0;
         foreach ($importation as $ligne) {
             $compteur = $compteur + 1;
             if ($compteur == 1) {
-                foreach ($ligne as $client) {
-                    $c = $em->getRepository('AppBundle:Client')->findOneBy(array(
-                        'nom' => $client->getNom()
-                    ));
-                    if ($c == null) {
-                        $em->persist($client);
-                    }
-                }
-                $em->flush();
+                $this->import_client($ligne, $em);
             }
             if ($compteur == 2) {
-                foreach ($ligne as $commande) {
-                    $date = new \DateTime($commande->getDate());
-                    $date->format('Y-m-d H:i:s');
-
-                    $c = $em->getRepository('AppBundle:Client')->findOneBy(array(
-                        'nom' => $commande->getClient()
-                    ));
-                    if ($c != null) {
-                        $new_commande = new Commande();
-                        $new_commande->setDate($date);
-                        $new_commande->setIdclient($c);
-                        $new_commande->setStatut($commande->getStatut());
-
-
-                        $commande_existe = $em->getRepository('AppBundle:Commande')->findOneBy(array(
-                            'date' => $date,
-                            'idclient' => $c->getIdClient()
-                        ));
-                        if ($commande_existe == null) {
-                            $em->persist($new_commande);
-                        }
-                    }
-                }
-                $em->flush();
+                $this->import_commande($ligne, $em);
             }
             if ($compteur == 3) {
-                foreach ($ligne as $lignesArticle) {
-                    $date = new \DateTime($lignesArticle->getDate());
-                    $date->format('Y-m-d H:i:s');
-                    $c2 = $em->getRepository('AppBundle:Client')->findOneBy(array(
-                        'nom' => $lignesArticle->getClient()
-                    ));
-                    $com = $em->getRepository('AppBundle:Commande')->findOneBy(array(
-                        'idclient' => $c2->getIdClient(),
-                        'date' => $date,
-                    ));
-                    $art = $em->getRepository('AppBundle:Article')->findOneBy(array(
-                        'nom' => trim($lignesArticle->getArticle()),
-                    ));
-
-                    $lignearticle = new \AppBundle\Entity\Lignearticle();
-                    $lignearticle->setQuantite($lignesArticle->getQuantite());
-                    $lignearticle->setIdcommande($com);
-                    $lignearticle->setIdarticle($art);
-                    
-                    
-                    $lignearticle_existe = $em->getRepository('AppBundle:Lignearticle')->findOneBy(array(
-                        'quantite' => $lignesArticle->getQuantite(),
-                        'idcommande' => $lignearticle->getIdcommande()->getIdCommande(),
-                        'idarticle' => $lignearticle->getIdarticle()->getIdarticle(),
-                    ));
-                    if ($lignearticle_existe == null) {
-                        $em->persist($lignearticle);
-                    }
-                }
-                $em->flush();
+                $this->import_article($ligne, $em);
             }
         }
 
         return $this->redirectToRoute('commande_index');
     }
 
-    
-    /*public function indexAction() {
-        $em = $this->getDoctrine()->getManager();
+    private function import_client($ligne, $em) {
+        foreach ($ligne as $client) {
+            $c = $em->getRepository('AppBundle:Client')->findOneBy(array(
+                'nom' => $client->getNom()
+            ));
+            if ($c == null) {
+                $em->persist($client);
+            }
+        }
+        $em->flush();
+    }
 
-        $commandes = $em->getRepository('AppBundle:Gestioncommande')->findAll();
-        $employes = $em->getRepository('AppBundle:Employe')->findAll();
+    private function import_commande($ligne, $em) {
+        foreach ($ligne as $commande) {
+            $date = new \DateTime($commande->getDate());
+            $date->format('Y-m-d H:i:s');
 
-        return $this->render('commande/liste_commandes.html.twig', ['commandes' => $commandes, 'employes' => $employes, 'active' => 'C']);
-    }*/
-    
+            $c = $em->getRepository('AppBundle:Client')->findOneBy(array(
+                'nom' => $commande->getClient()
+            ));
+            if ($c != null) {
+                $new_commande = new Commande();
+                $new_commande->setDate($date);
+                $new_commande->setIdclient($c);
+                $new_commande->setStatut($commande->getStatut());
+
+
+                $commande_existe = $em->getRepository('AppBundle:Commande')->findOneBy(array(
+                    'date' => $date,
+                    'idclient' => $c->getIdClient()
+                ));
+                if ($commande_existe == null) {
+                    $em->persist($new_commande);
+                }
+            }
+        }
+        $em->flush();
+    }
+
+    private function import_article($ligne, $em) {
+        foreach ($ligne as $lignesArticle) {
+            $date = new \DateTime($lignesArticle->getDate());
+            $date->format('Y-m-d H:i:s');
+            $c2 = $em->getRepository('AppBundle:Client')->findOneBy(array(
+                'nom' => $lignesArticle->getClient()
+            ));
+            $com = $em->getRepository('AppBundle:Commande')->findOneBy(array(
+                'idclient' => $c2->getIdClient(),
+                'date' => $date,
+            ));
+            $art = $em->getRepository('AppBundle:Article')->findOneBy(array(
+                'nom' => trim($lignesArticle->getArticle()),
+            ));
+
+            $lignearticle = new \AppBundle\Entity\Lignearticle();
+            $lignearticle->setQuantite($lignesArticle->getQuantite());
+            $lignearticle->setIdcommande($com);
+            $lignearticle->setIdarticle($art);
+
+
+            $lignearticle_existe = $em->getRepository('AppBundle:Lignearticle')->findOneBy(array(
+                'quantite' => $lignesArticle->getQuantite(),
+                'idcommande' => $lignearticle->getIdcommande()->getIdCommande(),
+                'idarticle' => $lignearticle->getIdarticle()->getIdarticle(),
+            ));
+            if ($lignearticle_existe == null) {
+                $em->persist($lignearticle);
+            }
+        }
+        $em->flush();
+    }
+
+    /* public function indexAction() {
+      $em = $this->getDoctrine()->getManager();
+
+      $commandes = $em->getRepository('AppBundle:Gestioncommande')->findAll();
+      $employes = $em->getRepository('AppBundle:Employe')->findAll();
+
+      return $this->render('commande/liste_commandes.html.twig', ['commandes' => $commandes, 'employes' => $employes, 'active' => 'C']);
+      } */
+
     /**
      * Lists all Commande entities.
      *
      * @Route("/", name="commande_index")
      * @Method({"POST", "GET"})
      */
-    public function indexAction(Request $request)
-    {
+    public function indexAction(Request $request) {
         $recherche = $request->request->get('recherche');
-        $em = $this ->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $commandeRepository = new CommandeRepository($em);
-        $commandes =  $commandeRepository->findAllCommandes();
+        $commandes = $commandeRepository->findAllCommandes();
 
         $repoEmploye = $em->getRepository('AppBundle:Employe');
         $employes = $repoEmploye->findAll();
-        $isFiltred = false;       
-	
-        if($recherche != null) {
+        $isFiltred = false;
+
+        if ($recherche != null) {
             $commandes = $commandeRepository->findCommandesByIdEmploye($recherche);
             //$commandes = $em->getRepository('AppBundle:Commande')->findBy(['idemploye' => $recherche]);
             $isFiltred = true;
         }
-        
-        return $this->render('commande/liste_commandes.html.twig',
-                ['commandes' => $commandes,
-                'filtre' => $isFiltred,
-                'employes' => $employes,
-                'statut' => null,
-                'active' => 'C']);
+
+        return $this->render('commande/liste_commandes.html.twig', ['commandes' => $commandes,
+                    'filtre' => $isFiltred,
+                    'employes' => $employes,
+                    'statut' => null,
+                    'active' => 'C']);
     }
+
     /**
      * Lists all Commande entities.
      *
-     * @Route("/{statut}", name="commande_index_filtred")
+     * @Route("/filtre/{statut}", name="commande_index_filtred")
      * @Method({"POST", "GET"})
      */
-    public function indexfiltredAction(Request $request, $statut)
-    {
+    public function indexfiltredAction(Request $request, $statut) {
         if ($statut != 'ALL') {
             $recherche = $request->request->get('recherche');
-            $em = $this ->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
             $commandeRepository = new CommandeRepository($em);
 
             $commandes = $commandeRepository->findCommandesByStatut($statut);
 
             $repoEmploye = $em->getRepository('AppBundle:Employe');
             $employes = $repoEmploye->findAll();
-            $isFiltred = false;       
+            $isFiltred = false;
 
-            if($recherche != null) {
+            if ($recherche != null) {
                 $commandes = $commandeRepository->findCommandesByStatutAndIdEmploye($statut, $recherche);
                 //$commandes = $em->getRepository('AppBundle:Commande')->findBy(['idemploye' => $recherche]);
                 $isFiltred = true;
             }
 
-            return $this->render('commande/liste_commandes.html.twig',
-                    ['commandes' => $commandes,
-                    'filtre' => $isFiltred,
-                    'employes' => $employes,
-                    'statut' => $statut,
-                    'active' => 'C']);
+            return $this->render('commande/liste_commandes.html.twig', ['commandes' => $commandes,
+                        'filtre' => $isFiltred,
+                        'employes' => $employes,
+                        'statut' => $statut,
+                        'active' => 'C']);
         } else {
             return $this->redirectToRoute('commande_index');
         }
