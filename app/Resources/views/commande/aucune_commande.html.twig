@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}}- Aucune commande{% endblock %}
+
+{% block stylesheets %}
+    <style type="text/css">
+        body { background-image: url("{{asset('images/aucune-commande.jpg')}}"); background-attachment: fixed; background-position: center; background-repeat: no-repeat;}
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1 class="text-center">Toutes les commandes on été traitées</h1>
+    
+{% endblock %}
