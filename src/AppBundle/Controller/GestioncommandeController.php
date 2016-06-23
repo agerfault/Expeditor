@@ -30,35 +30,45 @@ class GestioncommandeController extends Controller {
         $em = $this->getDoctrine()
                 ->getManager();
 
+        $session = new Session();
+        $employe = $session->get('employe');
+            
         $employeRepo = new EmployeRepository($em);
         $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::EMPLOYE);
-
-        $gestionCommandeRepository = new GestioncommandeRepository($em);
-        $gestioncommandes = $gestionCommandeRepository->findCommandeEnAttente();
         
-          if (!$gestioncommandes) {
-            var_dump('Sorry bro\' T O chomage teknik !');
-            exit();
-        }else{
-            
-            $gestionCommandeRepository->changerStatutCommande('EC', $gestioncommandes[0]['idcommande']);
+        $gestionCommandeRepository = new GestioncommandeRepository($em);
+        
+        $gestioncommandes = $gestionCommandeRepository->getCommandeEnCoursEmp($employe->getIdemploye());
+        
+        if($gestioncommandes)
+        {
+            $gestioncommandes = $gestionCommandeRepository->findCommandeEnCoursEmp($gestioncommandes[0][1]);
+        }
+        else
+        {
+            $gestioncommandes = $gestionCommandeRepository->findCommandeEnAttente();
 
-            $date = new \DateTime();
-            $session = new Session();
+            if (!$gestioncommandes) {
+                var_dump('Sorry bro\' T O chomage teknik !');
+                exit();
+            }else{
+                $gestionCommandeRepository->changerStatutCommande('EC', $gestioncommandes[0]['idcommande']);
 
-            $employe = $session->get('employe');
-            try {
-                $gestionCommandeRepository->insertCdeEmp($employe->getIdemploye(), $gestioncommandes[0]['idcommande'], $date->format('Y-m-d H:i:s'));
-            } catch (\Exception $ex) {
-                $this->addFlash('erreur', $ex->getMessage());
+                $date = new \DateTime();
+
+                try {
+                    $gestionCommandeRepository->insertCdeEmp($employe->getIdemploye(), $gestioncommandes[0]['idcommande'], $date->format('Y-m-d H:i:s'));
+                } catch (\Exception $ex) {
+                    $this->addFlash('erreur', $ex->getMessage());
+                }
             }
-
+        
+        }
+        
             return $this->render('gestioncommande/index.html.twig', array(
                         'gestioncommandes' => $gestioncommandes,
             ));
-        }
-
-       
+        
     }
 
     /**

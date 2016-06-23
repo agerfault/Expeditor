@@ -102,6 +102,26 @@ class GestioncommandeRepository
         return $query->getResult();
 		
     }
+    
+    public function findCommandeEnCoursEmp($idcde) {
+		$sql = 'SELECT  cmd.idcommande, cmd.date,
+                                cli.nom as nomClient, cli.adresse,
+                                art.idarticle, art.nom, art.poids,
+                                la.quantite
+                       FROM AppBundle:Commande cmd,
+                            AppBundle:Client cli,
+                            AppBundle:Lignearticle la,
+                            AppBundle:Article art
+                       WHERE cli.idclient = cmd.idclient
+                       AND la.idcommande = cmd.idcommande
+                       AND art.idarticle = la.idarticle
+                       AND cmd.idcommande = :id';
+		
+        $query = $this->_em->createQuery($sql);
+        $query->setParameter('id', $idcde);
+        return $query->getResult();
+		
+    }
 	
 	public function changerStatutCommande($statut, $idcde) {
 
