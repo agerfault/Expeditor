@@ -74,9 +74,9 @@ class GestioncommandeRepository
      * Récupération d'un tableau pour la gestion des commandes
      */
     public function findCommandeEnAttente() {
-            $id = 'SELECT cmd2.idcommande '
-                    . 'FROM AppBundle:Commande cmd2 '
-                    . 'WHERE cmd2.statut = :statut order by cmd2.date ASC ';
+            $id = 'SELECT cmd.idcommande '
+                    . 'FROM AppBundle:Commande cmd '
+                    . 'WHERE cmd.statut = :statut order by cmd.date ASC ';
             
             $query = $this->_em->createQuery($id);
             $query->setParameter('statut', 'EA');
@@ -103,7 +103,7 @@ class GestioncommandeRepository
 		
     }
 	
-	 public function changerStatutCommande($statut, $idcde) {
+	public function changerStatutCommande($statut, $idcde) {
 
 		 $id = 'UPDATE AppBundle:Commande cmd '
                     . 'SET cmd.statut = :statut '
@@ -115,6 +115,62 @@ class GestioncommandeRepository
 			$query->execute();
 			
 	 }
-	
+	 
+	 
+    public function getCommandeEnCoursEmp($idemp) {
+
+			$numcde = 'SELECT IDENTITY (gc.idcommande) '
+			.'FROM AppBundle:Gestioncommande gc, '
+                             .'AppBundle:Commande cde '
+                        .'WHERE cde.idcommande = gc.idcommande '
+                        .'AND cde.statut = \'EC\' '       
+			.'AND gc.idemploye = :idemp ';
+
+			$query = $this->_em->createQuery($numcde);
+                        $query->setParameter('idemp', $idemp);
+			
+			return $query->getResult();
+    }
     
+    
+    public function insertCdeEmp($idemp, $idcommande, $date){
+        
+        $servername = "127.0.0.1";
+        $username = "root";
+        $password = "";
+        $dbname = "expeditor";
+
+        // Create connection
+        $conn = new \mysqli($servername, $username, $password, $dbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        } 
+
+        $gestCde = 'insert into Gestioncommande (IdEmploye,IdCommande,Date) '
+                    . 'values ('.$idemp.', '.$idcommande.', \''.$date.'\');';
+
+        if ($conn->query($gestCde) === TRUE) {
+            
+        } else {
+            throw new \Exception("Error: " . $gestCde . "<br>" . $conn->error);
+        }
+
+        $conn->close();
+
+    }
+    
+     public function supprimerGestionCommande($idemp, $idcde) {
+
+			$numcde = 'DELETE AppBundle:Gestioncommande gc '
+                        .'WHERE gc.idemploye = :idemp '
+                       . 'AND gc.idcommande = :idcde ';
+
+			$query = $this->_em->createQuery($numcde);
+                        $query->setParameter('idemp', $idemp);
+                        $query->setParameter('idcde', $idcde);
+			
+			return $query->execute();
+    }
+
 }

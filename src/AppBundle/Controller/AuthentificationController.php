@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Repository\EmployeRepository;
+use Symfony\Component\HttpFoundation\Session\Session;
+use AppBundle\Enumeration\StatutEmployeEnum;
+use AppBundle\Repository\GestioncommandeRepository;
 
 /**
  * Description of AuthentificationController
@@ -49,6 +52,19 @@ class AuthentificationController extends Controller {
         $em = $this->getDoctrine()->getManager();
         
         try{
+			$session = new Session();
+			$employe = $session->get('employe');
+			if(!$employe){
+				$this->addFlash('erreur', 'Pas d\'employe connecté');
+			}
+			else{
+				if($employe->getStatut() == StatutEmployeEnum::EMPLOYE){
+                                    $gestionCommandeRepo = new GestioncommandeRepository($em);
+                                    $commande = $gestionCommandeRepo->getCommandeEnCoursEmp($employe->getIdemploye());
+                                    $gestionCommandeRepo->changerStatutCommande('EA', $commande[0][1]);
+                                    $gestionCommandeRepo->supprimerGestionCommande($employe->getIdemploye(),$commande[0][1]);
+				}
+			}
             $employeRepository = new EmployeRepository($em);
             $employeRepository->deconnecterEmploye();
         } catch (\Exception $ex) {

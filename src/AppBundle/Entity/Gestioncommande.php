@@ -41,8 +41,7 @@ class Gestioncommande
 
     /**
      * @var \AppBundle\Entity\Employe
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Employe")
+     * @ORM\ManyToOne(targetEntity="Employe", inversedBy="gestionCommandes")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="IdEmploye", referencedColumnName="IdEmploye")
      * })

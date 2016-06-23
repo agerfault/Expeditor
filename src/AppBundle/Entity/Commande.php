@@ -45,8 +45,6 @@ class Commande
      */
     private $idclient;
 
-
-
     /**
      * Set date
      *

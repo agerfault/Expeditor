@@ -43,7 +43,6 @@ class Employe
     private $idemploye;
 
 
-
     /**
      * Set nom
      *
@@ -124,5 +123,11 @@ class Employe
     public function getIdemploye()
     {
         return $this->idemploye;
+    }
+    
+
+    
+    public function __toString() {
+        return $this->nom;
     }
 }
