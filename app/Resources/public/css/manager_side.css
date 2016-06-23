@@ -1,5 +1,30 @@
 /*Main CSS*/
 
+.container{
+    margin-top:20px;
+}
+.image-preview-input {
+    position: relative;
+	overflow: hidden;
+	margin: 0px;    
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;    
+}
+.image-preview-input input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	padding: 0;
+	font-size: 20px;
+	cursor: pointer;
+	opacity: 0;
+	filter: alpha(opacity=0);
+}
+.image-preview-input-title {
+    margin-left:2px;
+}
 
 /*Login Signup Page*/
 a:focus,a:hover,a{
@@ -559,11 +584,7 @@ header {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 /*Main CSS*/
-
-
-
-
-
+}
 
 @media only screen and (max-device-width: 767px) {
     .login-logo img {
@@ -658,49 +679,49 @@ header {
 .gutter{
     padding: 0;
 }
-}
 
 @media only screen and (max-device-width: 992px) {
-    header .header-top li {
-        padding-left: 20px !important;
-        padding-right: 0;
-}
-    header .logo img {
-        max-width: 125px !important;
-}
+        header .header-top li {
+            padding-left: 20px !important;
+            padding-right: 0;
+    }
+        header .logo img {
+            max-width: 125px !important;
+    }
 
 }
 
 @media only screen and (min-device-width: 767px) and (max-device-width: 998px){
-      .user-dashboard .header-top {
-        padding-top: 5px;
-}
-    .user-dashboard .header-rightside {
-        display: inline-block;
-        float: left;
-        width: 100%;
-}
-    .user-dashboard .header-rightside .header-top img {
-        max-width: 41px !important;
-} 
-    .user-dashboard .sales button {
-    font-size: 10px;
-}
-    .user-dashboard .btn.btn-secondary.btn-lg.dropdown-toggle > span {
-    font-size: 12px;
-}
-    .user-dashboard .sales h2 {
-    font-size: 15px;
-}
+        .user-dashboard .header-top {
+          padding-top: 5px;
+  }
+      .user-dashboard .header-rightside {
+          display: inline-block;
+          float: left;
+          width: 100%;
+  }
+      .user-dashboard .header-rightside .header-top img {
+          max-width: 41px !important;
+  } 
+      .user-dashboard .sales button {
+      font-size: 10px;
+  }
+      .user-dashboard .btn.btn-secondary.btn-lg.dropdown-toggle > span {
+      font-size: 12px;
+  }
+      .user-dashboard .sales h2 {
+      font-size: 15px;
+  }
 }
 @media only screen and (min-device-width:998px) and (max-device-width: 1350px){
         #navigation .logo img {
-    max-width: 130px;
-    padding: 16px 0 17px;
-    width: 100%;
-}
+        max-width: 130px;
+        padding: 16px 0 17px;
+        width: 100%;
+    }
 }
 
 .well-shadow {
 	box-shadow: 8px 8px 0px #aaa;
 }
+

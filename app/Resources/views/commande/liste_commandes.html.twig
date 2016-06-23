@@ -159,26 +159,7 @@
                 <td class="text-center"><a class='btn btn-warning {% if commande.statut != "EC" %}disabled{% endif %}' href="{% if commande.idgestioncommande is not null %}{{path('gestioncommande_edit', {'id' : commande.idgestioncommande})}}{% else %}#{% endif %}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Modifier affectation" ><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
             </tr>
         {% endfor %}
-        </table>
-        
-        <div class='row'>
-            <!--
-            <div class='col-sm-4'></div>            
-            <div class='col-sm-4'>
-                <div class='well'>
-                    <form action="{{ path('commande_import') }}" method="POST" enctype="multipart/form-data" class='form-group' >
-                        <input type='file' name='file' class='btn btn-default' />
-                        <button type='submit' class='btn btn-success' >Valider</button>
-                    </form>
-                </div>
-                <div class='col-sm-4'></div>
-            </div>
-            -->
-    <div class="row">    
-
-    </div>
-        </div>
-                    
+        </table>                   
     </div>
         
             
