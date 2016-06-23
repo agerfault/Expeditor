@@ -24,14 +24,16 @@ class CommandeRepository extends EntityRepository {
         
         $query = $this->getEntityManager()
                         ->createQuery(
-                            'SELECT e.nom as nomemp, c.idcommande, c.date, c.statut, cli.nom as nomcli '
+                            'SELECT e.nom as nomemp, c.idcommande, c.date, c.statut, cli.nom as nomcli, gc.idgestioncommande  '
                                 . 'FROM AppBundle:Commande c '
                                 . 'LEFT JOIN AppBundle:Gestioncommande gc WITH gc.idcommande = c.idcommande '
                                 . 'LEFT JOIN AppBundle:Employe e WITH e.idemploye = gc.idemploye '
-                                . 'LEFT JOIN AppBundle:Client cli WITH c.idclient = cli.idclient ');
+                                . 'LEFT JOIN AppBundle:Client cli WITH c.idclient = cli.idclient '
+                                . 'ORDER BY c.statut ');
         return $query->getArrayResult();
     }
 
+<<<<<<< HEAD
     public function findCommandesByIdEmploye($idemploye) {
         
         $query = $this->getEntityManager()
@@ -41,9 +43,38 @@ class CommandeRepository extends EntityRepository {
                                 . 'LEFT JOIN AppBundle:Gestioncommande gc WITH gc.idcommande = c.idcommande '
                                 . 'LEFT JOIN AppBundle:Employe e WITH e.idemploye = gc.idemploye '
                                 . 'LEFT JOIN AppBundle:Client cli WITH c.idclient = cli.idclient '
-                                . 'WHERE e.idemploye = :idemploye ');
+                                . 'WHERE e.idemploye = :idemploye '
+                                . 'ORDER BY c.statut ');
         $query->setParameter('idemploye', $idemploye);
         return $query->getArrayResult();
     }
 
+    public function findCommandesByStatut($statut) {
+        
+        $query = $this->getEntityManager()
+                        ->createQuery(
+                            'SELECT e.nom as nomemp, c.idcommande, c.date, c.statut, cli.nom as nomcli '
+                                . 'FROM AppBundle:Commande c '
+                                . 'LEFT JOIN AppBundle:Gestioncommande gc WITH gc.idcommande = c.idcommande '
+                                . 'LEFT JOIN AppBundle:Employe e WITH e.idemploye = gc.idemploye '
+                                . 'LEFT JOIN AppBundle:Client cli WITH c.idclient = cli.idclient '
+                                . 'WHERE c.statut = :statut ');
+        $query->setParameter('statut', $statut);
+        return $query->getArrayResult();
+    }
+
+    public function findCommandesByStatutAndIdEmploye($statut, $idemploye) {
+        
+=======
+    
+    public function insertCommande($date,$statut,$idclient) {
+>>>>>>> origin/master
+        $query = $this->getEntityManager()
+                        ->createQuery(
+                'INSERT INTO AppBundle:Commande(date,statut,idclient) VALUES(?,?,?)')
+                ->setParameter(1, $date)
+                ->setParameter(2, $statut)
+                ->setParameter(3, $idclient);
+        return $query->execute();
+    }
 }

@@ -28,9 +28,11 @@
         </div>
 
         <div class='row' style='margin-bottom: 10px;'>
-            <div class='col-sm-1'>
-            </div>
-            <div class='col-sm-2'>
+            <div class='col-sm-3'>
+                <a href='{{path('commande_index_filtred', {'statut' : 'ALL'})}}' data-toggle="tooltip" data-placement="top" title="" data-original-title="Toutes" class="btn btn-default {%if statut is null %}disabled{% endif %}"><i class="fa fa-tasks" aria-hidden="true"></i></a>
+                <a href='{{path('commande_index_filtred', {'statut' : 'EA'})}}' data-toggle="tooltip" data-placement="top" title="" data-original-title="En attente" class="btn btn-danger {%if statut == 'EA' %}disabled{% endif %}"><b>A</b></a>
+                <a href='{{path('commande_index_filtred', {'statut' : 'EC'})}}' data-toggle="tooltip" data-placement="top" title="" data-original-title="En cours" class="btn btn-warning {%if statut == 'EC' %}disabled{% endif %}"><b>C</b></a>
+                <a href='{{path('commande_index_filtred', {'statut' : 'T'})}}' data-toggle="tooltip" data-placement="top" title="" data-original-title="Terminée" class="btn btn-success {%if statut == 'T' %}disabled{% endif %}"><b>T</b></a>
             </div>
             <div class='col-sm-4'>
                 <form class="form-inline" method='POST' action='{{path('commande_index')}}' >
@@ -72,7 +74,7 @@
                 <td class="text-center"><span class="label label-{% if commande.statut == "EA" %}danger{% elseif commande.statut == "EC" %}warning{% else %}success{% endif %}">{% if commande.statut == "EA" %}En attente{% elseif commande.statut == "EC" %}En cours{% else %}Terminée{% endif %}</span></td>
                 <td class="text-center">{% if commande.nomemp is null %}-{% else %}{{ commande.nomemp }}{% endif %}</td>
                 <td class="text-center">{{commande.date | date('d/m/Y')}}</td>
-                <td class="text-center"><a class='btn btn-warning {% if commande.statut != "EC" %}disabled{% endif %}' href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Modifier affectation" ><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+                <td class="text-center"><a class='btn btn-warning {% if commande.statut != "EC" %}disabled{% endif %}' href="{% if commande.idgestioncommande is not null %}{{path('gestioncommande_edit', {'id' : commande.idgestioncommande})}}{% else %}#{% endif %}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Modifier affectation" ><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
             </tr>
         {% endfor %}
         </table>

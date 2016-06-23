@@ -43,7 +43,7 @@ class Commande
      *   @ORM\JoinColumn(name="IdClient", referencedColumnName="IdClient")
      * })
      */
-    private $idclient;
+    private $idclient;  
 
     /**
      * Set date
@@ -110,13 +110,21 @@ class Commande
      *
      * @return Commande
      */
+    
     public function setIdclient(\AppBundle\Entity\Client $idclient = null)
     {
         $this->idclient = $idclient;
 
         return $this;
     }
-
+    
+    
+//    public function setIdclient($idClient)
+//    {
+//        $this->idclient = $idClient;
+//
+//        return $this;
+//    }
     /**
      * Get idclient
      *

@@ -35,8 +35,13 @@ class Client
      */
     private $idclient;
 
+    
+    function __construct($nom, $adresse) {
+        $this->nom = $nom;
+        $this->adresse = $adresse;
+    }
 
-
+    
     /**
      * Set nom
      *

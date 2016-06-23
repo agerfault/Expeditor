@@ -1,21 +1,51 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+    <script>
+        $(document).ready(function() { 
+            $(".select2").select2({ width: '100%' });
+        });
+    </script>
+{% endblock %}
+
 {% block body %}
-    <h1>Gestioncommande edit</h1>
+    <div class="row">
+        <div class='col-sm-11'>
+            <div class='well well-sm well-title'>
+                <h4>Modification de l'affectation</h4>
+            </div>
+        </div>
+        <div class='col-sm-1'>
+        </div>
+    </div>
+            
+    <div class="container">
+	<div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="well well-sm">
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+                    <form class='form-horizontal' method='POST' action='{{path('gestioncommande_edit', {'id' : idcommande})}}' >
+                        <div class="form-group">
+                            <div class='col-sm-1'></div>
+                                <label class="control-label col-sm-6" for="employe">Sélection d'un employé à affecté :</label>
+                                <div class="col-sm-4">
+                                    <div class="input-group select-style">
+                                         <select class='select2' name='affectation' >
+                                             {% for employe in employes %}
+                                                 <option value='{{employe.idemploye}}'>{{employe.nom}}</option>
+                                             {% endfor %}
+                                         </select>
+                                     </div>
+                                </div>
+                        </div>
 
-    <ul>
-        <li>
-            <a href="{{ path('gestioncommande_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+                        <center>
+                            <a href="{{ path('commande_index') }}" class='btn btn-primary' style='margin-right: 25px;'><i class="fa fa-arrow-left" aria-hidden="true"></i> Retour</a><a href="{{ path('liberer_commande', {'id' : idcommande}) }}" class='btn btn-danger' style='margin-right: 25px;'><i class="fa fa-times" aria-hidden="true"></i> Retirer affectation</a><input class='btn btn-success' type="submit" value="Modifier" />
+                        </center>   
+                    </form>
+
+                </div>
+            </div>
+	</div>
+    </div> 
 {% endblock %}
