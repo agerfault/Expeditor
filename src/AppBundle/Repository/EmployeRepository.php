@@ -11,6 +11,7 @@ namespace AppBundle\Repository;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 
 /**
  * Description of EmployeRepository
@@ -54,10 +55,10 @@ class EmployeRepository {
         $session = new Session();
         $employe = $session->get('employe');
         if($employe == null){
-            throw new AccessDeniedException('Vous n\'avez pas la permission d\'accéder à cette page.');
+            throw new \Exception('Access Interdit');
         }
         if($employe->getStatut() != $statut){
-            throw new AccessDeniedException('Vous n\'avez pas la permission d\'accéder à cette page.');
+            throw new \Exception('Access Interdit');
         }
     }
 }

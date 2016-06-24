@@ -36,6 +36,7 @@ class AuthentificationController extends Controller {
             $employeRepository->connecterEmploye($identifiant, $motDePasse);
         } catch (\Exception $ex) {
             $this->addFlash('erreur', $ex->getMessage());
+            return $this->redirectToRoute('homepage');
         }
         
         return $this->redirectToRoute('homepage');
@@ -61,8 +62,10 @@ class AuthentificationController extends Controller {
 				if($employe->getStatut() == StatutEmployeEnum::EMPLOYE){
                                     $gestionCommandeRepo = new GestioncommandeRepository($em);
                                     $commande = $gestionCommandeRepo->getCommandeEnCoursEmp($employe->getIdemploye());
-                                    $gestionCommandeRepo->changerStatutCommande('EA', $commande[0][1]);
-                                    $gestionCommandeRepo->supprimerGestionCommande($employe->getIdemploye(),$commande[0][1]);
+                                    if($commande != null){
+                                        $gestionCommandeRepo->changerStatutCommande('EA', $commande[0][1]);
+                                        $gestionCommandeRepo->supprimerGestionCommande($employe->getIdemploye(),$commande[0][1]);
+                                    }
 				}
 			}
             $employeRepository = new EmployeRepository($em);
