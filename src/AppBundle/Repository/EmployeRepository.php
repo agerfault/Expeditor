@@ -12,10 +12,8 @@ use Doctrine\ORM\EntityManager;
 use Exception;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Description of EmployeRepository
@@ -58,7 +56,6 @@ class EmployeRepository {
     public function verifierConnexionEmploye($statut){
         $session = new Session();
         $employe = $session->get('employe');
-        dump($employe);
         if($employe == null){
             throw new \Exception('Access Interdit');
         }
