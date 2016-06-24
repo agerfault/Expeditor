@@ -32,7 +32,6 @@ class GestioncommandeController extends Controller {
 
         $session = new Session();
         $employe = $session->get('employe');
-<<<<<<< HEAD
         try{    
             $employeRepo = new EmployeRepository($em);
             $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::EMPLOYE);
@@ -41,11 +40,6 @@ class GestioncommandeController extends Controller {
             $this->addFlash('erreur', $ex->getMessage());
             return $this->redirectToRoute('homepage');
         }
-=======
-            
-        //$employeRepo = new EmployeRepository($em);
-        //$employeRepo->verifierConnexionEmploye(StatutEmployeEnum::EMPLOYE);
->>>>>>> origin/master
         
         $gestionCommandeRepository = new GestioncommandeRepository($em);
         

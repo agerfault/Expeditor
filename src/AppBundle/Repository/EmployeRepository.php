@@ -12,12 +12,10 @@ use Doctrine\ORM\EntityManager;
 use Exception;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
-<<<<<<< HEAD
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
-=======
+
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
->>>>>>> origin/master
 
 /**
  * Description of EmployeRepository
