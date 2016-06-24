@@ -35,9 +35,11 @@ class CommandeController extends Controller {
 
         $import = new Importation();
 
-
-        $importation = $import->import_commande($request->files->get('file'));
-
+        try {
+            $importation = $import->import_commande($request->files->get('file'));
+        } catch (Exception $ex) {
+            throw $this->createNotFoundException("Erreur d'importation");
+        }
         $compteur = 0;
         foreach ($importation as $ligne) {
             $compteur = $compteur + 1;
@@ -145,10 +147,10 @@ class CommandeController extends Controller {
     public function indexAction(Request $request) {
         $recherche = $request->request->get('recherche');
         $em = $this->getDoctrine()->getManager();
-        
+
         $employeRepo = new EmployeRepository($em);
-        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
-        
+        //$employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+
         $commandeRepository = new CommandeRepository($em);
         $commandes = $commandeRepository->findAllCommandes();
 
@@ -178,12 +180,12 @@ class CommandeController extends Controller {
     public function indexfiltredAction(Request $request, $statut) {
         if ($statut != 'ALL') {
             $recherche = $request->request->get('recherche');
-            
+
             $em = $this->getDoctrine()->getManager();
 
             $employeRepo = new EmployeRepository($em);
-            $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
-        
+            //$employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+
             $commandeRepository = new CommandeRepository($em);
 
             $commandes = $commandeRepository->findCommandesByStatut($statut);
@@ -218,8 +220,8 @@ class CommandeController extends Controller {
         $commande = new Commande();
         $form = $this->createForm('AppBundle\Form\CommandeType', $commande);
         $form->handleRequest($request);
-        
-        
+
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();

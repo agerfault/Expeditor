@@ -34,7 +34,7 @@ class EmployeController extends Controller
         
         
         $employeRepo = new EmployeRepository($em);
-        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        //$employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
         
         
         $employes_select = $em->getRepository('AppBundle:Employe')->findBy([], ['statut' => 'DESC']);
@@ -75,7 +75,7 @@ class EmployeController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $employeRepo = new EmployeRepository($em);
-        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        //$employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
         
         
         if ($form->isSubmitted() && $form->isValid()) {
@@ -120,7 +120,7 @@ class EmployeController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $employeRepo = new EmployeRepository($em);
-        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        //$employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
         
         
         $editForm = $this->createForm('AppBundle\Form\EmployeType', $employe);
@@ -150,8 +150,8 @@ class EmployeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        $employeRepo = new EmployeRepository($em);
-        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        //$employeRepo = new EmployeRepository($em);
+        //$employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
         
         $em->getRepository('AppBundle:Employe')->findAll();
         $em->remove($employe);

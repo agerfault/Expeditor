@@ -2,9 +2,10 @@
 
 namespace AppBundle\DTO;
 
-use \Symfony\Component\Config\Definition\Exception\Exception;
-use AppBundle\Entity\Client;
 use AppBundle\DTO\CommandeImport;
+use AppBundle\Entity\Client;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Description of Importation
@@ -32,17 +33,23 @@ class Importation {
      * @throws Exception Erreur de lecture du fichier
      */
     public function etatFichier($fichier) {
+
+        $extension = pathinfo($fichier->getClientOriginalName());
         // Verification si le fichier existe
-        if (file_exists($fichier)) {
-            $handle = fopen($fichier, self::TYPE_OUVERTURE_FICHIER);
-            // Verification si le fichier à bien été ouvert
-            if ($handle) {
-                return $handle;
+        if ($extension['extension'] == 'csv') {
+            if (file_exists($fichier)) {
+                $handle = fopen($fichier, self::TYPE_OUVERTURE_FICHIER);
+                // Verification si le fichier à bien été ouvert
+                if ($handle) {
+                    return $handle;
+                } else {
+                    throw new Exception("Impossible d'ouvrir le fichier à importer.", 400);
+                }
             } else {
-                throw new Exception("Impossible d'ouvrir le fichier à importer.", 400);
+                throw new Exception("Le fichier à importer n'existe pas.", 400);
             }
         } else {
-            throw new Exception("Le fichier à importer n'existe pas.", 400);
+            throw new Exception("Type de fichier incorecte",400);
         }
     }
 
@@ -55,6 +62,7 @@ class Importation {
         // Verification sur le fichier
         $handle = $this->etatFichier($fichier);
 
+        try {
         fgets($handle);
         // Boucle tant que l'on est pas sur la derniere ligne du fichier
         while (!feof($handle)) {
@@ -76,7 +84,7 @@ class Importation {
                     if ($resultat != null) {
                         $article = substr($resultat[0], 0, strlen($resultat[0]) - 2);
                     }
-                    
+
                     if ($qte != null && $article != null) {
                         $ligneArticleImport = new LigneArticleImport($qte, $article, $colonnes[0], $colonnes[2]);
                     }
@@ -87,7 +95,9 @@ class Importation {
             }
         }
 
-        
+        } catch (Exception $ex){
+            throw new Exception('Fichier incorecte');
+        }
         array_push($import, $clients);
         array_push($import, $commandes);
         array_push($import, $lignearticle);

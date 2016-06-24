@@ -32,6 +32,7 @@ class GestioncommandeController extends Controller {
 
         $session = new Session();
         $employe = $session->get('employe');
+<<<<<<< HEAD
         try{    
             $employeRepo = new EmployeRepository($em);
             $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::EMPLOYE);
@@ -40,6 +41,11 @@ class GestioncommandeController extends Controller {
             $this->addFlash('erreur', $ex->getMessage());
             return $this->redirectToRoute('homepage');
         }
+=======
+            
+        //$employeRepo = new EmployeRepository($em);
+        //$employeRepo->verifierConnexionEmploye(StatutEmployeEnum::EMPLOYE);
+>>>>>>> origin/master
         
         $gestionCommandeRepository = new GestioncommandeRepository($em);
         
@@ -155,6 +161,22 @@ class GestioncommandeController extends Controller {
 
         return $this->render('gestioncommande/edit.html.twig', ['employes' => $employes,
                     'idcommande' => $gestioncommande->getIdgestioncommande()]);
+    }
+    
+    
+    
+    /**
+     * @Route("/{id}/liberercommande", name="liberer_commande")
+     * @Method({"GET", "POST"})
+     */
+    public function libererCommandeAction(Request $request, Gestioncommande $gestioncommande)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $gestioncommande->getIdcommande()->setStatut('EA');
+        $em->persist($gestioncommande->getIdcommande());
+        $em->remove($gestioncommande);
+        $em->flush();
+        return $this->redirectToRoute('commande_index');
     }
 
 }

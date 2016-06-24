@@ -30,7 +30,7 @@ class ArticleController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $employeRepo = new EmployeRepository($em);
-        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        //$employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
         
         $articles_select = $em->getRepository('AppBundle:Article')->findBy([], ['nom' => 'ASC']);
         $isFiltred = false;
@@ -63,7 +63,7 @@ class ArticleController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $employeRepo = new EmployeRepository($em);
-        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        //$employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setNom($form->get('nom')->getData());
@@ -108,7 +108,7 @@ class ArticleController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $employeRepo = new EmployeRepository($em);
-        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        //$employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
         
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em->persist($article);
@@ -134,7 +134,7 @@ class ArticleController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $employeRepo = new EmployeRepository($em);
-        $employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
+        //$employeRepo->verifierConnexionEmploye(StatutEmployeEnum::MANAGER);
         
         
         $em->getRepository('AppBundle:Article')->findAll();
